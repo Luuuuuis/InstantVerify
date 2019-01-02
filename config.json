@@ -1,0 +1,24 @@
+{
+  "Prefix": "&eInstantVerify &8>> &7",
+  "MySQL": {
+    "Host": "localhost",
+    "Port": 3306,
+    "Database": "DB",
+    "User": "root",
+    "Password": "sweetPassword"
+  },
+  "Discord": {
+    "State": false,
+    "Token": "YourDiscordToken",
+    "Channel-ID": "YourChannelToken"
+  },
+  "Webinterface": true,
+  "TeamSpeak": {
+    "Host": "localhost",
+    "username": "serveradmin",
+    "password": "yourPassword",
+    "VirtualServerId": 1,
+    "Nickname": "InstantVerify TS Bot",
+    "ServerGroup": 7
+  }
+}

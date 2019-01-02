@@ -1,0 +1,9 @@
+name: InstantVerify
+version: b1
+main: de.luuuuuis.Bungee.InstantVerify
+author: Luuuuuis
+authors: [Luuuuuis, yanjulang]
+website: https://www.spigotmc.org/resources/bangui-bungeecord-bangui-inc-webinterface-and-discord-bot.57031/
+prefix: InstantVerify
+
+commands:
