@@ -1,7 +1,10 @@
 package de.luuuuuis.Bungee;
 
+import de.luuuuuis.Bungee.Minecraft.VerifyCommand;
 import de.luuuuuis.Bungee.TeamSpeak.TeamSpeak;
+import net.md_5.bungee.api.ProxyServer;
 import net.md_5.bungee.api.plugin.Plugin;
+import net.md_5.bungee.api.plugin.PluginManager;
 
 import java.io.*;
 import java.net.HttpURLConnection;
@@ -99,6 +102,13 @@ public class InstantVerify extends Plugin {
          */
         ts = new TeamSpeak(config.getTeamSpeakCredentials().get("Host").toString(), config.getTeamSpeakCredentials().get("username").toString(), config.getTeamSpeakCredentials().get("password").toString(),
                 config.getTeamSpeakCredentials().get("VirtualServerId").toString(), config.getTeamSpeakCredentials().get("Nickname").toString(), config.getTeamSpeakCredentials().get("ServerGroup").toString());
+
+        /*
+         * Minecraft Commands
+         */
+
+        PluginManager pm = ProxyServer.getInstance().getPluginManager();
+        pm.registerCommand(this, new VerifyCommand("verify"));
     }
 
     @Override

@@ -13,15 +13,15 @@ import com.github.theholywaffle.teamspeak3.TS3Query;
  */
 public class TeamSpeak {
 
-    private static TS3Config config;
-    private static TS3Query query;
     private static TS3Api api;
+    private static Integer serverGroup;
 
-    public TeamSpeak(String host, String user, String password, String id, String nickname, String serverGroup) {
+    public TeamSpeak(String host, String user, String password, String id, String nickname, String serverGroupSt) {
 
-        config = new TS3Config();
-        query = new TS3Query(config);
+        TS3Config config = new TS3Config();
+        TS3Query query = new TS3Query(config);
         api = query.getApi();
+        serverGroup = Integer.parseInt(serverGroupSt);
 
         config.setHost(host);
         query.connect();
@@ -29,6 +29,14 @@ public class TeamSpeak {
         api.selectVirtualServerById(Integer.parseInt(id));
         api.setNickname(nickname);
 
-        new Events(api, Integer.parseInt(serverGroup));
+        new Events(api, serverGroup);
+    }
+
+    public static TS3Api getApi() {
+        return api;
+    }
+
+    public static Integer getServerGroup() {
+        return serverGroup;
     }
 }

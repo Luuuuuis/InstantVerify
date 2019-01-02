@@ -18,9 +18,9 @@ import java.util.List;
  * Date: 02.01.2019
  * Time 14:48
  */
-public class Events {
+class Events {
 
-    public Events(TS3Api api, Integer serverGroup) {
+    Events(TS3Api api, Integer serverGroup) {
 
         api.registerAllEvents();
         api.addTS3Listeners(new TS3Listener() {
@@ -32,7 +32,6 @@ public class Events {
             @Override
             public void onClientJoin(ClientJoinEvent clientJoinEvent) {
                 Client client = api.getClientByUId(clientJoinEvent.getUniqueClientIdentifier());
-                System.out.println(client.getIp());
                 List<Integer> groups = new ArrayList<>();
                 Arrays.stream(client.getServerGroups()).forEach(groups::add);
                 if (!groups.contains(serverGroup)) {
