@@ -1,5 +1,6 @@
 package de.luuuuuis.Bungee;
 
+import de.luuuuuis.Bungee.Discord.Discord;
 import de.luuuuuis.Bungee.Minecraft.VerifyCommand;
 import de.luuuuuis.Bungee.TeamSpeak.TeamSpeak;
 import net.md_5.bungee.api.ProxyServer;
@@ -23,6 +24,7 @@ public class InstantVerify extends Plugin {
     public static InstantVerify instance;
     public static String prefix;
     public static TeamSpeak ts;
+    public static String discordRole;
 
     public static InstantVerify getInstance() {
         return instance;
@@ -102,6 +104,15 @@ public class InstantVerify extends Plugin {
          */
         ts = new TeamSpeak(config.getTeamSpeakCredentials().get("Host").toString(), config.getTeamSpeakCredentials().get("username").toString(), config.getTeamSpeakCredentials().get("password").toString(),
                 config.getTeamSpeakCredentials().get("VirtualServerId").toString(), config.getTeamSpeakCredentials().get("Nickname").toString(), config.getTeamSpeakCredentials().get("ServerGroup").toString());
+
+        /*
+         * Starts the Discord Bot
+         */
+        String botToken = config.getDiscordCredentials().get("Token").toString();
+        if (!botToken.equals("BOT-TOKEN")) {
+            new Discord(botToken);
+            discordRole = config.getDiscordCredentials().get("ServerGroup").toString();
+        }
 
         /*
          * Minecraft Commands

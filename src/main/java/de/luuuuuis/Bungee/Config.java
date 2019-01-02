@@ -20,6 +20,7 @@ import java.util.Map;
 class Config {
 
     private HashMap<String, Object> TeamSpeakCredentials = new HashMap<>();
+    private HashMap<String, Object> DiscordCredentials = new HashMap<>();
 
     @SuppressWarnings("ResultOfMethodCallIgnored")
     Config() {
@@ -46,12 +47,18 @@ class Config {
             Object object = new JSONParser().parse(new FileReader(InstantVerify.getInstance().getDataFolder().getPath() + "/config.json"));
             JSONObject jsonObject = (JSONObject) object;
 
-            InstantVerify.prefix = ChatColor.translateAlternateColorCodes('&', jsonObject.get("Prefix").toString().replace("§", "&") + "&7");
+            InstantVerify.prefix = ChatColor.translateAlternateColorCodes('&', jsonObject.get("Prefix").toString().replace("§", "&") + "&7 ");
 
             Map TeamSpeakJSON = (Map) jsonObject.get("TeamSpeak");
             for (Object o : TeamSpeakJSON.entrySet()) {
                 Map.Entry pair = (Map.Entry) o;
                 TeamSpeakCredentials.put(pair.getKey().toString(), pair.getValue());
+            }
+
+            Map DiscordJSON = (Map) jsonObject.get("Discord");
+            for (Object o : DiscordJSON.entrySet()) {
+                Map.Entry pair = (Map.Entry) o;
+                DiscordCredentials.put(pair.getKey().toString(), pair.getValue());
             }
         } catch (IOException | ParseException e) {
             e.printStackTrace();
@@ -60,5 +67,9 @@ class Config {
 
     HashMap<String, Object> getTeamSpeakCredentials() {
         return TeamSpeakCredentials;
+    }
+
+    HashMap<String, Object> getDiscordCredentials() {
+        return DiscordCredentials;
     }
 }
