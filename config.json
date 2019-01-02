@@ -1,5 +1,5 @@
 {
-  "Prefix": "&eInstantVerify &8>> &7",
+  "Prefix": "&eInstantVerify &8>>",
   "MySQL": {
     "Host": "localhost",
     "Port": 3306,

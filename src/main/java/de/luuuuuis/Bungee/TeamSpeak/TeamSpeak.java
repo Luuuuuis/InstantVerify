@@ -17,7 +17,7 @@ public class TeamSpeak {
     private static TS3Query query;
     private static TS3Api api;
 
-    public TeamSpeak(String host, String user, String password, Integer id, String nickname, Integer serverGroup) {
+    public TeamSpeak(String host, String user, String password, String id, String nickname, String serverGroup) {
 
         config = new TS3Config();
         query = new TS3Query(config);
@@ -26,9 +26,9 @@ public class TeamSpeak {
         config.setHost(host);
         query.connect();
         api.login(user, password);
-        api.selectVirtualServerById(id);
+        api.selectVirtualServerById(Integer.parseInt(id));
         api.setNickname(nickname);
 
-        new Events(api, serverGroup);
+        new Events(api, Integer.parseInt(serverGroup));
     }
 }

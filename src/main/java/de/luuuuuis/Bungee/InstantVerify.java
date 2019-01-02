@@ -15,10 +15,15 @@ import java.net.URL;
  * Date: 02.01.2019
  * Time 14:29
  */
-public class InstantVerify<config> extends Plugin {
+public class InstantVerify extends Plugin {
 
     public static InstantVerify instance;
+    public static String prefix;
     public static TeamSpeak ts;
+
+    public static InstantVerify getInstance() {
+        return instance;
+    }
 
     @Override
     public void onEnable() {
@@ -75,8 +80,8 @@ public class InstantVerify<config> extends Plugin {
                         ex.printStackTrace();
                     }
 
-                    System.out.println("InstantVerify >> A new update is available(" + versionCode[0] + " please restart your server.");
-                    System.out.println("InstantVerify >> Changelog can be viewed at GitHub: https://github.com/Luuuuuis/Banns-Reloaded/releases");
+                    System.out.println("InstantVerify >> A new update is available(" + versionCode[0] + " please restart your server soon.");
+                    System.out.println("InstantVerify >> Changelog can be viewed at GitHub: https://github.com/Luuuuuis/InstantVerify/releases");
 
                 });
                 th.start();
@@ -86,34 +91,18 @@ public class InstantVerify<config> extends Plugin {
             ex.printStackTrace();
         }
 
+        Config config = new Config();
+
+
         /*
          * Starts the TeamSpeak Bot
          */
-        ts = new TeamSpeak("193.34.78.120", "serveradmin", "9RXY7PLH", 1, "InstantVerify Bot", 7);
-        System.out.println("Started ye");
+        ts = new TeamSpeak(config.getTeamSpeakCredentials().get("Host").toString(), config.getTeamSpeakCredentials().get("username").toString(), config.getTeamSpeakCredentials().get("password").toString(),
+                config.getTeamSpeakCredentials().get("VirtualServerId").toString(), config.getTeamSpeakCredentials().get("Nickname").toString(), config.getTeamSpeakCredentials().get("ServerGroup").toString());
     }
 
     @Override
     public void onDisable() {
         super.onDisable();
-    }
-
-    @SuppressWarnings("ResultOfMethodCallIgnored")
-    private void config() {
-        File file = new File(getDataFolder().getPath(), "config.json");
-        if (!file.exists()) {
-            if (!getDataFolder().exists())
-                getDataFolder().mkdir();
-            try (InputStream input = new URL("").openStream();
-                 FileOutputStream output = new FileOutputStream(file)) {
-                file.createNewFile();
-            } catch (IOException ex) {
-                ex.printStackTrace();
-            }
-        }
-    }
-
-    public static InstantVerify getInstance() {
-        return instance;
     }
 }
