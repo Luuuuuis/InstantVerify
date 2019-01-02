@@ -23,7 +23,7 @@ class Config {
 
     @SuppressWarnings("ResultOfMethodCallIgnored")
     Config() {
-        File file = new File(InstantVerify.getInstance().getDataFolder().getPath(), "Config.json");
+        File file = new File(InstantVerify.getInstance().getDataFolder().getPath(), "config.json");
         if (!file.exists()) {
             if (!InstantVerify.getInstance().getDataFolder().exists())
                 InstantVerify.getInstance().getDataFolder().mkdir();
@@ -43,7 +43,7 @@ class Config {
         }
 
         try {
-            Object object = new JSONParser().parse(new FileReader(InstantVerify.getInstance().getDataFolder().getPath() + "/Config.json"));
+            Object object = new JSONParser().parse(new FileReader(InstantVerify.getInstance().getDataFolder().getPath() + "/config.json"));
             JSONObject jsonObject = (JSONObject) object;
 
             InstantVerify.prefix = ChatColor.translateAlternateColorCodes('&', jsonObject.get("Prefix").toString().replace("§", "&") + "&7");
