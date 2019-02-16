@@ -20,8 +20,9 @@ public class InstantVerify extends Plugin {
     public static String prefix;
     public static String discordRole;
     public static String version;
+    public static ServerConfig serverConfig;
 
-    static InstantVerify getInstance() {
+    public static InstantVerify getInstance() {
         return instance;
     }
 
@@ -46,14 +47,13 @@ public class InstantVerify extends Plugin {
         /*
          * ServerConfig
          */
-        ServerConfig serverConfig = new ServerConfig();
+        serverConfig = new ServerConfig();
 
         /*
          * Starts the TeamSpeak Bot
          */
         if (!serverConfig.getTeamSpeakCredentials().get("password").toString().equals("yourPassword")) {
-            new TeamSpeak(serverConfig.getTeamSpeakCredentials().get("Host").toString(), serverConfig.getTeamSpeakCredentials().get("username").toString(), serverConfig.getTeamSpeakCredentials().get("password").toString(),
-                    serverConfig.getTeamSpeakCredentials().get("VirtualServerId").toString(), serverConfig.getTeamSpeakCredentials().get("Nickname").toString(), serverConfig.getTeamSpeakCredentials().get("ServerGroup").toString());
+            new TeamSpeak();
         }
 
         /*

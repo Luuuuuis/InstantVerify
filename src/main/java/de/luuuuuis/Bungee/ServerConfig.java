@@ -87,7 +87,7 @@ public class ServerConfig {
         }
     }
 
-    HashMap<String, Object> getTeamSpeakCredentials() {
+    public HashMap<String, Object> getTeamSpeakCredentials() {
         return TeamSpeakCredentials;
     }
 
