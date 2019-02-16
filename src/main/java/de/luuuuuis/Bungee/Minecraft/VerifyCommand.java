@@ -3,10 +3,12 @@ package de.luuuuuis.Bungee.Minecraft;
 import com.github.theholywaffle.teamspeak3.api.ClientProperty;
 import com.github.theholywaffle.teamspeak3.api.wrapper.Client;
 import de.luuuuuis.Bungee.Discord.Discord;
+import de.luuuuuis.Bungee.Events.VerifyEvent;
 import de.luuuuuis.Bungee.InstantVerify;
 import de.luuuuuis.Bungee.TeamSpeak.TeamSpeak;
 import net.dv8tion.jda.core.entities.User;
 import net.md_5.bungee.api.CommandSender;
+import net.md_5.bungee.api.ProxyServer;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
 import net.md_5.bungee.api.plugin.Command;
 
@@ -101,9 +103,13 @@ public class VerifyCommand extends Command {
             Arrays.stream(client.getServerGroups()).forEach(groups::add);
             if (!groups.contains(TeamSpeak.getServerGroup())) {
                 if (client.getIp().equals(p.getAddress().getHostString())) {
-                    TeamSpeak.getApi().addClientToServerGroup(TeamSpeak.getServerGroup(), client.getDatabaseId());
-                    TeamSpeak.getApi().editDatabaseClient(client.getDatabaseId(), Collections.singletonMap(ClientProperty.CLIENT_DESCRIPTION, "Minecraft Name: " + p.getName()));
-                    p.sendMessage(InstantVerify.prefix + "Thank you for verifying");
+                    VerifyEvent verifyEvent = new VerifyEvent();
+                    ProxyServer.getInstance().getPluginManager().callEvent(verifyEvent);
+                    if (!verifyEvent.isCancelled()) {
+                        TeamSpeak.getApi().addClientToServerGroup(TeamSpeak.getServerGroup(), client.getDatabaseId());
+                        TeamSpeak.getApi().editDatabaseClient(client.getDatabaseId(), Collections.singletonMap(ClientProperty.CLIENT_DESCRIPTION, "Minecraft Name: " + p.getName()));
+                        p.sendMessage(InstantVerify.prefix + "Thank you for verifying");
+                    }
                 } else {
                     p.sendMessage(InstantVerify.prefix + "We couldn't verify you because your IP on the Minecraft server is different from the one on TeamSpeak. Are you sure you entered the correct ID?");
                 }
