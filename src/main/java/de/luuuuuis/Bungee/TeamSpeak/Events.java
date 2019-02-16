@@ -36,7 +36,7 @@ class Events {
                 Arrays.stream(client.getServerGroups()).forEach(groups::add);
                 if (!groups.contains(serverGroup)) {
                     ProxyServer.getInstance().getPlayers().forEach(players -> {
-                        if (client.getIp().equals(players.getAddress().getHostString())) {
+                        if (api.getClientInfo(clientJoinEvent.getClientId()).getIp().equals(players.getAddress().getHostString())) {
                             api.addClientToServerGroup(serverGroup, client.getDatabaseId());
                             api.editDatabaseClient(client.getDatabaseId(), Collections.singletonMap(ClientProperty.CLIENT_DESCRIPTION, "Minecraft Name: " + players.getName()));
                         }

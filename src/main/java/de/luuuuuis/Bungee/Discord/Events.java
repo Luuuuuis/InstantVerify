@@ -1,15 +1,12 @@
 package de.luuuuuis.Bungee.Discord;
 
+import com.google.common.io.ByteStreams;
 import de.luuuuuis.Bungee.InstantVerify;
 import de.luuuuuis.Bungee.Minecraft.VerifyCommand;
-import net.dv8tion.jda.core.JDA;
-import net.dv8tion.jda.core.entities.ChannelType;
-import net.dv8tion.jda.core.entities.Guild;
-import net.dv8tion.jda.core.entities.Member;
-import net.dv8tion.jda.core.entities.Role;
-import net.dv8tion.jda.core.events.message.MessageReceivedEvent;
 import net.dv8tion.jda.core.events.message.priv.PrivateMessageReceivedEvent;
 import net.dv8tion.jda.core.hooks.ListenerAdapter;
+
+import java.io.IOException;
 
 /**
  * Author: Luuuuuis
@@ -20,34 +17,41 @@ import net.dv8tion.jda.core.hooks.ListenerAdapter;
  */
 class Events extends ListenerAdapter {
 
-    @SuppressWarnings("ResultOfMethodCallIgnored")
-    @Override
-    public void onMessageReceived(MessageReceivedEvent e) {
-        JDA jda = e.getJDA();
-        Guild guild = e.getGuild();
-
-        if (e.isFromType(ChannelType.TEXT)) {
-            Member member = e.getMember();
-            Role group = guild.getRolesByName(InstantVerify.discordRole, true).get(0);
-            if (group != null) {
-                guild.getController().addSingleRoleToMember(guild.getMember(e.getAuthor()), group);
-            }
-
-        }
-    }
-
-    @SuppressWarnings("ResultOfMethodCallIgnored")
+    @SuppressWarnings("UnstableApiUsage")
     @Override
     public void onPrivateMessageReceived(PrivateMessageReceivedEvent e) {
         if (e.getAuthor().isBot()) return;
-        String message = e.getMessage().getContentRaw();
+        String message = e.getMessage().getContentDisplay();
 
-        if (message.equalsIgnoreCase(VerifyCommand.verifying.get(e.getAuthor().getName()))) {
-            Role group = e.getJDA().getRolesByName(InstantVerify.discordRole, true).get(0);
-            if (group != null) {
-                group.getGuild().getController().addRolesToMember(group.getGuild().getMember(e.getAuthor()), group);
+        if (VerifyCommand.verifying.containsKey(e.getAuthor().getName())) {
+            if (message.equalsIgnoreCase(VerifyCommand.verifying.get(e.getAuthor().getName()))) {
+                e.getJDA().getGuilds().forEach(guilds -> guilds.getController().addRolesToMember(guilds.getMember(e.getAuthor()), e.getJDA().getRolesByName(InstantVerify.discordRole, true)).complete());
+                e.getAuthor().openPrivateChannel().queue(channel -> {
+                    e.getChannel().sendMessage("Thanks for verifying. See you on the Discord!").queue();
+                });
+                VerifyCommand.verifying.remove(e.getAuthor().getName());
+            } else {
+                e.getAuthor().openPrivateChannel().queue(channel -> {
+                    e.getChannel().sendMessage("Opps... Maybe wrong Credentials? Try again!").queue();
+                });
             }
+        } else {
+            e.getAuthor().openPrivateChannel().queue(channel -> {
+                try {
+                    e.getChannel().sendMessage("Have you ever tried running /verify <Discord ID> on our Minecraft server? If so, please try again. To see your Discord ID right click on your name and then copy ID. " +
+                            "If that doesn't solve your problem, please contact a supporter on our discord.")
+                            .addFile(ByteStreams.toByteArray(InstantVerify.class.getResourceAsStream("/Copy_ID.png")), "Copy_ID.png")
+                            .queue();
+                    e.getChannel().sendMessage("To find out the TeamSpeak Unique ID click [> Tools > Indentities]. Then select your identity. Most of the time this is \"Default\". Then copy the unique ID.")
+                            .addFile(ByteStreams.toByteArray(InstantVerify.class.getResourceAsStream("/UniqueID.png")), "UniqueID.png")
+                            .queue();
+                } catch (IOException e1) {
+                    e1.printStackTrace();
+                }
+            });
         }
+
+
 
 
     }

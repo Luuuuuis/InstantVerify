@@ -7,11 +7,6 @@ import net.md_5.bungee.api.ProxyServer;
 import net.md_5.bungee.api.plugin.Plugin;
 import net.md_5.bungee.api.plugin.PluginManager;
 
-import java.io.*;
-import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
-import java.net.URL;
-
 /**
  * Author: Luuuuuis
  * Project: InstantVerify
@@ -21,12 +16,12 @@ import java.net.URL;
  */
 public class InstantVerify extends Plugin {
 
-    public static InstantVerify instance;
+    private static InstantVerify instance;
     public static String prefix;
-    public static TeamSpeak ts;
     public static String discordRole;
+    public static String version;
 
-    public static InstantVerify getInstance() {
+    static InstantVerify getInstance() {
         return instance;
     }
 
@@ -35,7 +30,7 @@ public class InstantVerify extends Plugin {
         super.onEnable();
         instance = this;
 
-        System.out.println("\n" +
+        System.out.println("Thanks for using\n" +
                 " __     __   __     ______     ______   ______     __   __     ______   __   __   ______     ______     __     ______   __  __    \n" +
                 "/\\ \\   /\\ \"-.\\ \\   /\\  ___\\   /\\__  _\\ /\\  __ \\   /\\ \"-.\\ \\   /\\__  _\\ /\\ \\ / /  /\\  ___\\   /\\  == \\   /\\ \\   /\\  ___\\ /\\ \\_\\ \\   \n" +
                 "\\ \\ \\  \\ \\ \\-.  \\  \\ \\___  \\  \\/_/\\ \\/ \\ \\  __ \\  \\ \\ \\-.  \\  \\/_/\\ \\/ \\ \\ \\'/   \\ \\  __\\   \\ \\  __<   \\ \\ \\  \\ \\  __\\ \\ \\____ \\  \n" +
@@ -43,75 +38,31 @@ public class InstantVerify extends Plugin {
                 "  \\/_/   \\/_/ \\/_/   \\/_____/     \\/_/   \\/_/\\/_/   \\/_/ \\/_/     \\/_/   \\/_/      \\/_____/   \\/_/ /_/   \\/_/   \\/_/     \\/_____/ \n" +
                 "\n\n" +
                 "Version: " + getDescription().getVersion() + "\n" +
-                "Support: https://discord.gg/2aSSGcz \n" +
+                "Support: https://discord.gg/2aSSGcz\n" +
                 "GitHub: https://github.com/Luuuuuis/InstantVerify\n"
         );
 
+
         /*
-         * Updater
+         * ServerConfig
          */
-        URL url;
-        HttpURLConnection connection = null;
-        try {
-            url = new URL("https://raw.githubusercontent.com/Luuuuuis/InstantVerify/master/version");
-            connection = (HttpURLConnection) url.openConnection();
-        } catch (IOException e1) {
-            e1.printStackTrace();
-        }
-
-        assert connection != null;
-        try (BufferedReader in = new BufferedReader(new InputStreamReader(connection.getInputStream()))) {
-            String[] versionCode = in.readLine().split("&&");
-
-            if (!(versionCode[0].equalsIgnoreCase(getDescription().getVersion()))) {
-                Thread th = new Thread(() -> {
-
-                    URL dURL = null;
-                    try {
-                        dURL = new URL(versionCode[1]);
-                    } catch (MalformedURLException ex) {
-                        ex.printStackTrace();
-                    }
-
-                    assert dURL != null;
-                    try (InputStream input = dURL.openStream();
-                         FileOutputStream output = new FileOutputStream(getFile())) {
-                        byte[] buffer = new byte[4096];
-                        int n;
-                        while (-1 != (n = input.read(buffer))) {
-                            output.write(buffer, 0, n);
-                        }
-                    } catch (IOException ex) {
-                        ex.printStackTrace();
-                    }
-
-                    System.out.println("InstantVerify >> A new update is available(" + versionCode[0] + " please restart your server soon.");
-                    System.out.println("InstantVerify >> Changelog can be viewed at GitHub: https://github.com/Luuuuuis/InstantVerify/releases");
-
-                });
-                th.start();
-            }
-            connection.disconnect();
-        } catch (IOException ex) {
-            ex.printStackTrace();
-        }
-
-        Config config = new Config();
-
+        ServerConfig serverConfig = new ServerConfig();
 
         /*
          * Starts the TeamSpeak Bot
          */
-        ts = new TeamSpeak(config.getTeamSpeakCredentials().get("Host").toString(), config.getTeamSpeakCredentials().get("username").toString(), config.getTeamSpeakCredentials().get("password").toString(),
-                config.getTeamSpeakCredentials().get("VirtualServerId").toString(), config.getTeamSpeakCredentials().get("Nickname").toString(), config.getTeamSpeakCredentials().get("ServerGroup").toString());
+        if (!serverConfig.getTeamSpeakCredentials().get("password").toString().equals("yourPassword")) {
+            new TeamSpeak(serverConfig.getTeamSpeakCredentials().get("Host").toString(), serverConfig.getTeamSpeakCredentials().get("username").toString(), serverConfig.getTeamSpeakCredentials().get("password").toString(),
+                    serverConfig.getTeamSpeakCredentials().get("VirtualServerId").toString(), serverConfig.getTeamSpeakCredentials().get("Nickname").toString(), serverConfig.getTeamSpeakCredentials().get("ServerGroup").toString());
+        }
 
         /*
          * Starts the Discord Bot
          */
-        String botToken = config.getDiscordCredentials().get("Token").toString();
+        String botToken = serverConfig.getDiscordCredentials().get("Token").toString();
         if (!botToken.equals("BOT-TOKEN")) {
             new Discord(botToken);
-            discordRole = config.getDiscordCredentials().get("ServerGroup").toString();
+            discordRole = serverConfig.getDiscordCredentials().get("ServerGroup").toString();
         }
 
         /*
@@ -120,10 +71,22 @@ public class InstantVerify extends Plugin {
 
         PluginManager pm = ProxyServer.getInstance().getPluginManager();
         pm.registerCommand(this, new VerifyCommand("verify"));
+
+        /*
+         * Updater
+         */
+        version = getDescription().getVersion();
+        new Update(version, getFile());
     }
 
     @Override
     public void onDisable() {
         super.onDisable();
+        TeamSpeak.getQuery().exit();
+        Discord.getJda().shutdownNow();
+        System.out.println("InstantVerify >> Did you like it? Yes/No? Drop me a line and let me know what's on your mind! \n\n" +
+                "Discord for Support: https://discord.gg/2aSSGcz\n" +
+                "GitHub: https://github.com/Luuuuuis/InstantVerify\n" +
+                "GitHub Issue: https://github.com/Luuuuuis/InstantVerify/issue\n");
     }
 }

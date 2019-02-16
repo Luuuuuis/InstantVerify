@@ -6,7 +6,7 @@
 
     <groupId>de.luuuuuis.InstantVerify</groupId>
     <artifactId>InstantVerify</artifactId>
-    <version>1.0-SNAPSHOT</version>
+    <version>1.16.022019</version>
 
     <repositories>
         <repository>
@@ -109,17 +109,16 @@
             <version>1.8.8-R0.1-SNAPSHOT</version>
             <scope>provided</scope>
         </dependency>
-        <dependency>
-            <groupId>org.bukkit</groupId>
-            <artifactId>bukkit</artifactId>
-            <version>1.8.8-R0.1-SNAPSHOT</version>
-            <scope>provided</scope>
-        </dependency>
         <!-- https://mvnrepository.com/artifact/com.github.theholywaffle/teamspeak3-api -->
         <dependency>
             <groupId>com.github.theholywaffle</groupId>
             <artifactId>teamspeak3-api</artifactId>
-            <version>1.0.14</version>
+            <version>1.2.0</version>
+        </dependency>
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-simple</artifactId>
+            <version>1.7.25</version>
         </dependency>
     </dependencies>
 

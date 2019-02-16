@@ -4,6 +4,7 @@ import net.dv8tion.jda.core.AccountType;
 import net.dv8tion.jda.core.JDA;
 import net.dv8tion.jda.core.JDABuilder;
 import net.dv8tion.jda.core.OnlineStatus;
+import net.dv8tion.jda.core.entities.Game;
 
 import javax.security.auth.login.LoginException;
 
@@ -18,18 +19,24 @@ public class Discord {
 
     private static JDA jda;
 
-    @SuppressWarnings("deprecation")
     public Discord(String token) {
-        try {
-            jda = new JDABuilder(AccountType.BOT)
-                    .setToken(token)
-                    .setStatus(OnlineStatus.ONLINE)
-                    .addEventListener(new Events())
-                    .buildBlocking();
-            jda.setAutoReconnect(true);
-        } catch (LoginException | InterruptedException e) {
-            e.printStackTrace();
-        }
+
+        Thread thread = new Thread(() -> {
+            try {
+                jda = new JDABuilder(AccountType.BOT)
+                        .setToken(token)
+                        .setStatus(OnlineStatus.ONLINE)
+                        .addEventListener(new Events())
+                        .setGame(Game.listening("Write me"))
+                        .buildAsync();
+                jda.setAutoReconnect(true);
+            } catch (LoginException e) {
+                e.printStackTrace();
+                jda = null;
+            }
+        });
+        thread.start();
+
     }
 
     public static JDA getJda() {
