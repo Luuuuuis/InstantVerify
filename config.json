@@ -4,7 +4,6 @@
     "Token": "BOT-TOKEN",
     "ServerGroup": "user"
   },
-  "Webinterface": true,
   "TeamSpeak": {
     "Host": "localhost",
     "username": "serveradmin",

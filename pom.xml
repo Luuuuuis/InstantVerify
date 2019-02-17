@@ -6,7 +6,7 @@
 
     <groupId>de.luuuuuis.InstantVerify</groupId>
     <artifactId>InstantVerify</artifactId>
-    <version>1.16.022019</version>
+    <version>1.17.022019</version>
 
     <repositories>
         <repository>
