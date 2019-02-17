@@ -7,12 +7,14 @@ import de.luuuuuis.Bungee.TeamSpeak.TeamSpeak;
 import net.md_5.bungee.api.ProxyServer;
 import net.md_5.bungee.api.event.PostLoginEvent;
 import net.md_5.bungee.api.plugin.Listener;
-import org.bukkit.event.EventHandler;
+import net.md_5.bungee.event.EventHandler;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
+import java.util.concurrent.Executor;
+import java.util.concurrent.Executors;
 
 /**
  * Author: Luuuuuis
@@ -23,9 +25,11 @@ import java.util.List;
  */
 public class PostLogin implements Listener {
 
+    Executor executor = Executors.newSingleThreadExecutor();
+
     @EventHandler
-    public void onPostLogin(PostLoginEvent e) {
-        TeamSpeak.getApi().getClients().forEach(clients -> {
+    public void onPostJoin(PostLoginEvent e) {
+        executor.execute(() -> TeamSpeak.getApi().getClients().forEach(clients -> {
             if (clients.getIp().equals(e.getPlayer().getAddress().getHostString())) {
                 List<Integer> groups = new ArrayList<>();
                 Arrays.stream(clients.getServerGroups()).forEach(groups::add);
@@ -38,6 +42,6 @@ public class PostLogin implements Listener {
                     }
                 }
             }
-        });
+        }));
     }
 }

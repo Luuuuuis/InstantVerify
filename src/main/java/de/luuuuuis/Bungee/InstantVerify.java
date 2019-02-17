@@ -4,7 +4,6 @@ import de.luuuuuis.Bungee.Discord.Discord;
 import de.luuuuuis.Bungee.Listener.PostLogin;
 import de.luuuuuis.Bungee.Minecraft.VerifyCommand;
 import de.luuuuuis.Bungee.TeamSpeak.TeamSpeak;
-import net.md_5.bungee.api.ProxyServer;
 import net.md_5.bungee.api.plugin.Plugin;
 import net.md_5.bungee.api.plugin.PluginManager;
 
@@ -70,7 +69,7 @@ public class InstantVerify extends Plugin {
          * Minecraft Commands
          */
 
-        PluginManager pm = ProxyServer.getInstance().getPluginManager();
+        PluginManager pm = getProxy().getPluginManager();
         pm.registerCommand(this, new VerifyCommand("verify"));
         pm.registerListener(this, new PostLogin());
 
