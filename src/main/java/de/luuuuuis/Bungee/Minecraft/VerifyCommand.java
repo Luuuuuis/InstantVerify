@@ -107,7 +107,9 @@ public class VerifyCommand extends Command {
                     ProxyServer.getInstance().getPluginManager().callEvent(verifyEvent);
                     if (!verifyEvent.isCancelled()) {
                         TeamSpeak.getApi().addClientToServerGroup(TeamSpeak.getServerGroup(), client.getDatabaseId());
-                        TeamSpeak.getApi().editDatabaseClient(client.getDatabaseId(), Collections.singletonMap(ClientProperty.CLIENT_DESCRIPTION, "Minecraft Name: " + p.getName()));
+                        TeamSpeak.getApi().editDatabaseClient(client.getDatabaseId(), Collections.singletonMap(ClientProperty.CLIENT_DESCRIPTION, InstantVerify.serverConfig.getTeamSpeakCredentials().get("Description").toString()
+                                .replace("%Name", p.getName())
+                                .replace("%UUID", p.getUniqueId().toString())));
                         p.sendMessage(InstantVerify.prefix + "Thank you for verifying");
                     }
                 } else {

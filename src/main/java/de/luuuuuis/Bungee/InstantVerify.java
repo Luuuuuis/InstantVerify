@@ -71,7 +71,9 @@ public class InstantVerify extends Plugin {
 
         PluginManager pm = getProxy().getPluginManager();
         pm.registerCommand(this, new VerifyCommand("verify"));
-        pm.registerListener(this, new PostLogin());
+        if (serverConfig.getTeamSpeakCredentials().get("Instant").equals(true)) {
+            pm.registerListener(this, new PostLogin());
+        }
 
         /*
          * Updater

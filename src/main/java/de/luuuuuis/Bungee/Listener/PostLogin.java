@@ -38,7 +38,9 @@ public class PostLogin implements Listener {
                     ProxyServer.getInstance().getPluginManager().callEvent(verifyEvent);
                     if (!verifyEvent.isCancelled()) {
                         TeamSpeak.getApi().addClientToServerGroup(Integer.parseInt(InstantVerify.serverConfig.getTeamSpeakCredentials().get("ServerGroup").toString()), clients.getDatabaseId());
-                        TeamSpeak.getApi().editDatabaseClient(clients.getDatabaseId(), Collections.singletonMap(ClientProperty.CLIENT_DESCRIPTION, "Minecraft Name: " + e.getPlayer().getName()));
+                        TeamSpeak.getApi().editDatabaseClient(clients.getDatabaseId(), Collections.singletonMap(ClientProperty.CLIENT_DESCRIPTION, InstantVerify.serverConfig.getTeamSpeakCredentials().get("Description").toString()
+                                .replace("%Name", e.getPlayer().getName())
+                                .replace("%UUID", e.getPlayer().getUniqueId().toString())));
                     }
                 }
             }

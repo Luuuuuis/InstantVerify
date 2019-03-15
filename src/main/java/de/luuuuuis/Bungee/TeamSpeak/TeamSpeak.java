@@ -36,8 +36,10 @@ public class TeamSpeak {
 
                 System.out.println("InstantVerify >> Successfully connected to TeamSpeak");
 
-                assert api != null;
-                new Events(api, serverGroup);
+                if (InstantVerify.serverConfig.getTeamSpeakCredentials().get("Instant").equals(true)) {
+                    assert api != null;
+                    new Events(api, serverGroup);
+                }
             });
             thread.start();
         } catch (TS3Exception ex) {
