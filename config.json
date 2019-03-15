@@ -10,6 +10,7 @@
     "password": "yourPassword",
     "VirtualServerId": 1,
     "Nickname": "InstantVerify TS Bot",
-    "ServerGroup": 7
+    "ServerGroup": 7,
+    "Description": "Minecraft Name: %Name UUID: %UUID"
   }
 }

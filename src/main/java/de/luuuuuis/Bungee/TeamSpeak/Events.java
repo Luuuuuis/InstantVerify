@@ -5,6 +5,7 @@ import com.github.theholywaffle.teamspeak3.api.ClientProperty;
 import com.github.theholywaffle.teamspeak3.api.event.*;
 import com.github.theholywaffle.teamspeak3.api.wrapper.Client;
 import de.luuuuuis.Bungee.Events.VerifyEvent;
+import de.luuuuuis.Bungee.InstantVerify;
 import net.md_5.bungee.api.ProxyServer;
 
 import java.util.ArrayList;
@@ -42,7 +43,9 @@ class Events {
                             ProxyServer.getInstance().getPluginManager().callEvent(verifyEvent);
                             if (!verifyEvent.isCancelled()) {
                                 api.addClientToServerGroup(serverGroup, client.getDatabaseId());
-                                api.editDatabaseClient(client.getDatabaseId(), Collections.singletonMap(ClientProperty.CLIENT_DESCRIPTION, "Minecraft Name: " + players.getName()));
+                                api.editDatabaseClient(client.getDatabaseId(), Collections.singletonMap(ClientProperty.CLIENT_DESCRIPTION, InstantVerify.serverConfig.getTeamSpeakCredentials().get("Description").toString()
+                                        .replace("%Name", players.getName())
+                                        .replace("%UUID", players.getUniqueId().toString())));
                             }
                         }
                     });
