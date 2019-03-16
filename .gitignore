@@ -3,15 +3,6 @@
 # Compiled class file
 *.class
 
-# Log file
-*.log
-
-# BlueJ files
-*.ctxt
-
-# Mobile Tools for Java (J2ME)
-.mtj.tmp/
-
 # Package Files #
 *.jar
 *.war
@@ -29,6 +20,8 @@ hs_err_pid*
 # IntelliJ project files
 .idea
 *.iml
-.gitignore
 src/test/
 target/
+
+# GitHub files
+.github
