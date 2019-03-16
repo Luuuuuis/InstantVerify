@@ -1,3 +1,9 @@
+/*
+ * Developed by Luuuuuis on 16.03.19 19:32.
+ * Last modified 16.03.19 19:30.
+ * Copyright (c) 2019.
+ */
+
 package de.luuuuuis.Bungee;
 
 import net.md_5.bungee.api.ChatColor;
@@ -16,13 +22,6 @@ import java.nio.file.StandardCopyOption;
 import java.util.HashMap;
 import java.util.Map;
 
-/**
- * Author: Luuuuuis
- * Project: InstantVerify
- * Package: de.luuuuuis.Bungee
- * Date: 02.01.2019
- * Time 18:00
- */
 public class ServerConfig {
 
     private HashMap<String, Object> TeamSpeakCredentials = new HashMap<>();

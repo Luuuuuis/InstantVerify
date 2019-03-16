@@ -1,3 +1,9 @@
+/*
+ * Developed by Luuuuuis on 16.03.19 19:32.
+ * Last modified 16.03.19 19:32.
+ * Copyright (c) 2019.
+ */
+
 package de.luuuuuis.Bungee.Discord;
 
 import com.google.common.io.ByteStreams;
@@ -56,8 +62,6 @@ class Events extends ListenerAdapter {
                 }
             });
         }
-
-
 
 
     }

@@ -1,3 +1,9 @@
+/*
+ * Developed by Luuuuuis on 16.03.19 19:32.
+ * Last modified 16.03.19 19:31.
+ * Copyright (c) 2019.
+ */
+
 package de.luuuuuis.Bungee.Discord;
 
 import net.dv8tion.jda.core.AccountType;
@@ -8,13 +14,6 @@ import net.dv8tion.jda.core.entities.Game;
 
 import javax.security.auth.login.LoginException;
 
-/**
- * Author: Luuuuuis
- * Project: InstantVerify
- * Package: de.luuuuuis.Bungee.Discord
- * Date: 02.01.2019
- * Time 19:01
- */
 public class Discord {
 
     private static JDA jda;

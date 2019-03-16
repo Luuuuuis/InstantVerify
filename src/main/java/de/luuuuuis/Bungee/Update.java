@@ -1,3 +1,9 @@
+/*
+ * Developed by Luuuuuis on 16.03.19 19:32.
+ * Last modified 16.03.19 19:29.
+ * Copyright (c) 2019.
+ */
+
 package de.luuuuuis.Bungee;
 
 import java.io.*;
@@ -6,13 +12,6 @@ import java.net.URL;
 import java.nio.file.Files;
 import java.nio.file.StandardCopyOption;
 
-/**
- * Author: Luuuuuis
- * Project: InstantVerify
- * Package: de.luuuuuis.Bungee
- * Date: 16.02.2019
- * Time 16:39
- */
 public class Update {
 
     public Update(String version, File outputFile) {

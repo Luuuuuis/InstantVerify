@@ -1,4 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
+<!--
+  ~ Developed by Luuuuuis on 16.03.19 19:32.
+  ~ Last modified 16.03.19 19:18.
+  ~ Copyright (c) 2019.
+  -->
+
 <project xmlns="http://maven.apache.org/POM/4.0.0"
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
@@ -6,7 +12,7 @@
 
     <groupId>de.luuuuuis.InstantVerify</groupId>
     <artifactId>InstantVerify</artifactId>
-    <version>1.1.15.032019</version>
+    <version>1.2.16.032019</version>
 
     <repositories>
         <repository>

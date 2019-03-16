@@ -1,3 +1,9 @@
+/*
+ * Developed by Luuuuuis on 16.03.19 19:32.
+ * Last modified 16.03.19 19:29.
+ * Copyright (c) 2019.
+ */
+
 package de.luuuuuis.Bungee;
 
 import de.luuuuuis.Bungee.Discord.Discord;
@@ -7,20 +13,13 @@ import de.luuuuuis.Bungee.TeamSpeak.TeamSpeak;
 import net.md_5.bungee.api.plugin.Plugin;
 import net.md_5.bungee.api.plugin.PluginManager;
 
-/**
- * Author: Luuuuuis
- * Project: InstantVerify
- * Package: de.luuuuuis.Bungee
- * Date: 02.01.2019
- * Time 14:29
- */
 public class InstantVerify extends Plugin {
 
-    private static InstantVerify instance;
     public static String prefix;
     public static String discordRole;
     public static String version;
     public static ServerConfig serverConfig;
+    private static InstantVerify instance;
 
     public static InstantVerify getInstance() {
         return instance;

@@ -1,21 +1,20 @@
+/*
+ * Developed by Luuuuuis on 16.03.19 19:32.
+ * Last modified 16.03.19 19:30.
+ * Copyright (c) 2019.
+ */
+
 package de.luuuuuis.Bungee.TeamSpeak;
 
-import com.github.theholywaffle.teamspeak3.TS3Api;
+import com.github.theholywaffle.teamspeak3.TS3ApiAsync;
 import com.github.theholywaffle.teamspeak3.TS3Config;
 import com.github.theholywaffle.teamspeak3.TS3Query;
 import com.github.theholywaffle.teamspeak3.api.exception.TS3Exception;
 import de.luuuuuis.Bungee.InstantVerify;
 
-/**
- * Author: Luuuuuis
- * Project: InstantVerify
- * Package: de.luuuuuis.Bungee.TeamSpeak
- * Date: 02.01.2019
- * Time 14:32
- */
 public class TeamSpeak {
 
-    private static TS3Api api;
+    private static TS3ApiAsync api;
     private static TS3Query query;
     private static Integer serverGroup;
 
@@ -25,7 +24,7 @@ public class TeamSpeak {
             Thread thread = new Thread(() -> {
                 TS3Config config = new TS3Config();
                 query = new TS3Query(config);
-                api = query.getApi();
+                api = query.getAsyncApi();
                 serverGroup = Integer.parseInt(InstantVerify.serverConfig.getTeamSpeakCredentials().get("ServerGroup").toString());
 
                 config.setHost(InstantVerify.serverConfig.getTeamSpeakCredentials().get("Host").toString());
@@ -52,7 +51,7 @@ public class TeamSpeak {
 
     }
 
-    public static TS3Api getApi() {
+    public static TS3ApiAsync getApi() {
         return api;
     }
 

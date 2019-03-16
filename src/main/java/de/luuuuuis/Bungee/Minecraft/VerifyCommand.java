@@ -1,7 +1,13 @@
+/*
+ * Developed by Luuuuuis on 16.03.19 19:32.
+ * Last modified 16.03.19 19:30.
+ * Copyright (c) 2019.
+ */
+
 package de.luuuuuis.Bungee.Minecraft;
 
+import com.github.theholywaffle.teamspeak3.TS3ApiAsync;
 import com.github.theholywaffle.teamspeak3.api.ClientProperty;
-import com.github.theholywaffle.teamspeak3.api.wrapper.Client;
 import de.luuuuuis.Bungee.Discord.Discord;
 import de.luuuuuis.Bungee.Events.VerifyEvent;
 import de.luuuuuis.Bungee.InstantVerify;
@@ -14,13 +20,6 @@ import net.md_5.bungee.api.plugin.Command;
 
 import java.util.*;
 
-/**
- * Author: Luuuuuis
- * Project: InstantVerify
- * Package: de.luuuuuis.Bungee.Minecraft
- * Date: 02.01.2019
- * Time 18:24
- */
 public class VerifyCommand extends Command {
 
     public static HashMap<String, String> verifying = new HashMap<>();
@@ -36,6 +35,8 @@ public class VerifyCommand extends Command {
             sender.sendMessage("InstantVerify >> Command only usable as player");
             return;
         }
+
+        TS3ApiAsync apiAsync = TeamSpeak.getApi();
 
         ProxiedPlayer p = (ProxiedPlayer) sender;
 
@@ -76,49 +77,88 @@ public class VerifyCommand extends Command {
                 p.sendMessage("");
             }
             if (args[0].length() == 18) {
-                if (Discord.getJda() == null) return;
+                if (Discord.getJda() == null) {
+                    p.sendMessage(InstantVerify.prefix + "We couldn't verify you because there is no connection to Discord");
+                    return;
+                }
                 User user = Discord.getJda().getUserById(args[0]);
                 if (user == null) {
                     p.sendMessage(InstantVerify.prefix + "Please join our Discord and check your Discord ID");
                     return;
                 }
                 verifying.put(user.getName(), p.getName());
-                p.sendMessage(InstantVerify.prefix + "Our Discord Bot has written to you. Please answer with your Minecraft name.");
                 user.openPrivateChannel().queue(channel -> channel.sendMessage("Hi " + user.getAsMention() + ",\nPlease send me your Minecraft name to verify that you own the Minecraft account." +
                         "\nIf it isn't your account just close the chat.").queue());
+                p.sendMessage(InstantVerify.prefix + "Our Discord Bot has written to you. Please answer with your Minecraft name.");
                 return;
             }
-            if (TeamSpeak.getApi() == null) return;
-            Client client;
+            if (apiAsync == null) {
+                p.sendMessage(InstantVerify.prefix + "We couldn't verify you because there is no connection to TeamSpeak");
+                return;
+            }
             if (args[0].endsWith("=") && args[0].length() == 28) {
-                client = TeamSpeak.getApi().getClientByUId(args[0]);
-            } else {
-                client = TeamSpeak.getApi().getClientByNameExact(args[0], false);
-            }
-            if (client == null) {
-                p.sendMessage(InstantVerify.prefix + "Please connect to our TeamSpeak and check your Unique ID");
-                return;
-            }
-            List<Integer> groups = new ArrayList<>();
-            Arrays.stream(client.getServerGroups()).forEach(groups::add);
-            if (!groups.contains(TeamSpeak.getServerGroup())) {
-                if (client.getIp().equals(p.getAddress().getHostString())) {
-                    VerifyEvent verifyEvent = new VerifyEvent();
-                    ProxyServer.getInstance().getPluginManager().callEvent(verifyEvent);
-                    if (!verifyEvent.isCancelled()) {
-                        TeamSpeak.getApi().addClientToServerGroup(TeamSpeak.getServerGroup(), client.getDatabaseId());
-                        TeamSpeak.getApi().editDatabaseClient(client.getDatabaseId(), Collections.singletonMap(ClientProperty.CLIENT_DESCRIPTION, InstantVerify.serverConfig.getTeamSpeakCredentials().get("Description").toString()
-                                .replace("%Name", p.getName())
-                                .replace("%UUID", p.getUniqueId().toString())));
-                        p.sendMessage(InstantVerify.prefix + "Thank you for verifying");
+                apiAsync.getClientByUId(args[0]).onSuccess(clientInfo -> {
+                    if (clientInfo == null) {
+                        p.sendMessage(InstantVerify.prefix + "Please connect to our TeamSpeak and check your Unique ID");
+                        return;
                     }
-                } else {
-                    p.sendMessage(InstantVerify.prefix + "We couldn't verify you because your IP on the Minecraft server is different from the one on TeamSpeak. Are you sure you entered the correct ID?");
-                }
+                    List<Integer> groups = new ArrayList<>();
+                    Arrays.stream(clientInfo.getServerGroups()).forEach(groups::add);
+
+                    if (!groups.contains(TeamSpeak.getServerGroup())) {
+                        if (clientInfo.getIp().equals(p.getAddress().getHostString())) {
+                            VerifyEvent verifyEvent = new VerifyEvent();
+                            ProxyServer.getInstance().getPluginManager().callEvent(verifyEvent);
+                            if (!verifyEvent.isCancelled()) {
+                                apiAsync.addClientToServerGroup(TeamSpeak.getServerGroup(), clientInfo.getDatabaseId());
+                                apiAsync.editDatabaseClient(clientInfo.getDatabaseId(), Collections.singletonMap(ClientProperty.CLIENT_DESCRIPTION,
+                                        InstantVerify.serverConfig.getTeamSpeakCredentials().get("Description").toString()
+                                                .replace("%Name", p.getName())
+                                                .replace("%UUID", p.getUniqueId().toString())
+                                ));
+                                p.sendMessage(InstantVerify.prefix + "Thank you for verifying");
+                            }
+                        } else {
+                            p.sendMessage(InstantVerify.prefix + "We couldn't verify you because your IP on the Minecraft server is different from the one on TeamSpeak. Are you sure you entered the correct ID?");
+                        }
+                    } else {
+                        p.sendMessage(InstantVerify.prefix + "You are already verified");
+                    }
+                }).onFailure(ex -> {
+                    p.sendMessage(InstantVerify.prefix + "Please connect to our TeamSpeak and check your Unique ID");
+                });
             } else {
-                p.sendMessage(InstantVerify.prefix + "You are already verified");
+                apiAsync.getClientByNameExact(args[0], false).onSuccess(client -> {
+                    if (client == null) {
+                        p.sendMessage(InstantVerify.prefix + "Please connect to our TeamSpeak and check your Unique ID");
+                        return;
+                    }
+                    List<Integer> groups = new ArrayList<>();
+                    Arrays.stream(client.getServerGroups()).forEach(groups::add);
+
+                    if (!groups.contains(TeamSpeak.getServerGroup())) {
+                        if (client.getIp().equals(p.getAddress().getHostString())) {
+                            VerifyEvent verifyEvent = new VerifyEvent();
+                            ProxyServer.getInstance().getPluginManager().callEvent(verifyEvent);
+                            if (!verifyEvent.isCancelled()) {
+                                apiAsync.addClientToServerGroup(TeamSpeak.getServerGroup(), client.getDatabaseId());
+                                apiAsync.editDatabaseClient(client.getDatabaseId(), Collections.singletonMap(ClientProperty.CLIENT_DESCRIPTION,
+                                        InstantVerify.serverConfig.getTeamSpeakCredentials().get("Description").toString()
+                                                .replace("%Name", p.getName())
+                                                .replace("%UUID", p.getUniqueId().toString())
+                                ));
+                                p.sendMessage(InstantVerify.prefix + "Thank you for verifying");
+                            }
+                        } else {
+                            p.sendMessage(InstantVerify.prefix + "We couldn't verify you because your IP on the Minecraft server is different from the one on TeamSpeak. Are you sure you entered the correct ID?");
+                        }
+                    } else {
+                        p.sendMessage(InstantVerify.prefix + "You are already verified");
+                    }
+                });
             }
         }
 
     }
+
 }
