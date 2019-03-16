@@ -1,6 +1,6 @@
 /*
- * Developed by Luuuuuis on 16.03.19 19:32.
- * Last modified 16.03.19 19:30.
+ * Developed by Luuuuuis on 16.03.19 19:40.
+ * Last modified 16.03.19 19:39.
  * Copyright (c) 2019.
  */
 
@@ -48,7 +48,7 @@ public class VerifyCommand extends Command {
             if (Discord.getJda() != null) {
                 usage += "/Discord ID";
             }
-            usage += "/Help/Status>";
+            usage += "/Status>";
             p.sendMessage(usage);
         } else {
             if (args[0].equalsIgnoreCase("author") || args[0].equalsIgnoreCase("version") || args[0].equalsIgnoreCase("status")) {
@@ -71,10 +71,6 @@ public class VerifyCommand extends Command {
                 p.sendMessage("§cVersion: " + InstantVerify.version);
                 p.sendMessage("");
                 return;
-            } else if (args[0].equalsIgnoreCase("help")) {
-                p.sendMessage("");
-                p.sendMessage(InstantVerify.prefix + "If you need help, please send our bot on Discord a message or contact a team member.");
-                p.sendMessage("");
             }
             if (args[0].length() == 18) {
                 if (Discord.getJda() == null) {
