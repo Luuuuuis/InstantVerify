@@ -1,6 +1,6 @@
 /*
- * Developed by Luuuuuis on 02.04.19 18:04.
- * Last modified 02.04.19 18:04.
+ * Developed by Luuuuuis on 02.04.19 18:31.
+ * Last modified 02.04.19 18:31.
  * Copyright (c) 2019.
  */
 
@@ -48,20 +48,22 @@ public class VerifyCommand extends Command {
         if (args.length != 1) {
             String usage = InstantVerify.prefix + "/verify <";
             if (TeamSpeak.getApi() != null) {
-                usage += "TeamSpeak Name/TeamSpeak Unique ID/IP";
+                usage += "TeamSpeak Name|TeamSpeak Unique ID|IP";
             }
             if (Discord.getJda() != null) {
-                usage += "/Discord ID";
+                usage += "|Discord ID";
             }
             usage += "/Status>";
             p.sendMessage(usage);
         } else {
             if (args[0].equalsIgnoreCase("author") || args[0].equalsIgnoreCase("version") || args[0].equalsIgnoreCase("status")) {
                 p.sendMessage("");
-                p.sendMessage(InstantVerify.prefix + "Bei fragen schreibe bitte ein Teammitglied an.\n");
+                p.sendMessage(InstantVerify.prefix + "Bei Fragen schreibe bitte ein Teammitglied an.\n");
 
-                p.sendMessage("§7Derzeit ist der Bot" + (TeamSpeak.getApi() != null ? "" : " §4nicht§7") + " mit dem TeamSpeak verbunden");
+                p.sendMessage("§7Derzeit ist der Bot" + (TeamSpeak.getApi() != null ? "" : " §4nicht§7") + " mit dem TeamSpeak verbunden.");
+                p.sendMessage("§7Derzeit ist der Bot" + (Discord.getJda() != null ? "" : " §4nicht§7") + " mit Discord verbunden.");
 
+                p.sendMessage("");
                 p.sendMessage("§cAuthor: Luuuuuis\nTwitter: @realluuuuuis");
                 p.sendMessage("§cGitHub: https://github.com/Luuuuuis/InstantVerify");
                 p.sendMessage("§cGitHub Issue: https://github.com/Luuuuuis/InstantVerify/issues");
@@ -143,9 +145,7 @@ public class VerifyCommand extends Command {
                     } else {
                         p.sendMessage(InstantVerify.prefix + "§cDu hast dich bereits verifiziert.");
                     }
-                }).onFailure(ex -> {
-                    p.sendMessage(InstantVerify.prefix + "Bitte betrete unseren TeamSpeak und überprüfe dein Namen.");
-                });
+                }).onFailure(ex -> p.sendMessage(InstantVerify.prefix + "Bitte betrete unseren TeamSpeak und überprüfe dein Namen."));
             } else {
                 apiAsync.getClientByNameExact(args[0], false).onSuccess(client -> {
                     if (client == null) {
