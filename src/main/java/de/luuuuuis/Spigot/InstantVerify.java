@@ -1,19 +1,20 @@
 /*
  * Developed by Luuuuuis on 02.04.19 19:39.
- * Last modified 02.04.19 19:39.
+ * Last modified 02.04.19 19:36.
  * Copyright (c) 2019.
  */
 
-package de.luuuuuis.Bungee;
+package de.luuuuuis.Spigot;
 
-import de.luuuuuis.Bungee.Commands.VerifyCommand;
-import de.luuuuuis.Bungee.Discord.Discord;
-import de.luuuuuis.Bungee.Listener.PostLogin;
-import de.luuuuuis.Bungee.TeamSpeak.TeamSpeak;
-import net.md_5.bungee.api.plugin.Plugin;
-import net.md_5.bungee.api.plugin.PluginManager;
+import de.luuuuuis.Spigot.Commands.VerifyCommand;
+import de.luuuuuis.Spigot.Discord.Discord;
+import de.luuuuuis.Spigot.Listener.Join;
+import de.luuuuuis.Spigot.TeamSpeak.TeamSpeak;
+import org.bukkit.plugin.PluginManager;
+import org.bukkit.plugin.java.JavaPlugin;
 
-public class InstantVerify extends Plugin {
+public class InstantVerify extends JavaPlugin {
+
 
     public static String prefix;
     public static String discordRole;
@@ -56,7 +57,7 @@ public class InstantVerify extends Plugin {
         }
 
         /*
-         * Starts the Discord Bot
+         * Starts the Discord Bot (Further Updates)
          */
         String botToken = serverConfig.getDiscordCredentials().get("Token").toString();
         if (!botToken.equals("BOT-TOKEN")) {
@@ -68,10 +69,10 @@ public class InstantVerify extends Plugin {
          * Commands Commands
          */
 
-        PluginManager pm = getProxy().getPluginManager();
-        pm.registerCommand(this, new VerifyCommand("verify"));
+        PluginManager pm = getServer().getPluginManager();
+        getCommand("verify").setExecutor(new VerifyCommand());
         if (serverConfig.getTeamSpeakCredentials().get("Instant").equals(true)) {
-            pm.registerListener(this, new PostLogin());
+            pm.registerEvents(new Join(), this);
         }
 
         /*
@@ -85,10 +86,11 @@ public class InstantVerify extends Plugin {
     public void onDisable() {
         super.onDisable();
         TeamSpeak.getQuery().exit();
-        Discord.getJda().shutdownNow();
+//        Discord.getJda().shutdownNow();
         System.out.println("InstantVerify >> Did you like it? Yes/No? Drop me a line and let me know what's on your mind! \n\n" +
                 "Discord for Support: https://discord.gg/2aSSGcz\n" +
                 "GitHub: https://github.com/Luuuuuis/InstantVerify\n" +
                 "GitHub Issue: https://github.com/Luuuuuis/InstantVerify/issue\n");
     }
+
 }

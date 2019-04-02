@@ -4,15 +4,13 @@
  * Copyright (c) 2019.
  */
 
-package de.luuuuuis.Bungee.Discord;
+package de.luuuuuis.Spigot.Discord;
 
 import com.google.common.io.ByteStreams;
-import de.luuuuuis.Bungee.Commands.VerifyCommand;
-import de.luuuuuis.Bungee.Events.VerifyEvent;
-import de.luuuuuis.Bungee.InstantVerify;
+import de.luuuuuis.Spigot.Commands.VerifyCommand;
+import de.luuuuuis.Spigot.InstantVerify;
 import net.dv8tion.jda.core.events.message.priv.PrivateMessageReceivedEvent;
 import net.dv8tion.jda.core.hooks.ListenerAdapter;
-import net.md_5.bungee.api.ProxyServer;
 
 import java.io.IOException;
 
@@ -26,13 +24,9 @@ class Events extends ListenerAdapter {
 
         if (VerifyCommand.verifying.containsKey(e.getAuthor().getName())) {
             if (message.equalsIgnoreCase(VerifyCommand.verifying.get(e.getAuthor().getName()))) {
-                VerifyEvent verifyEvent = new VerifyEvent();
-                ProxyServer.getInstance().getPluginManager().callEvent(verifyEvent);
-                if (!verifyEvent.isCancelled()) {
-                    e.getJDA().getGuilds().forEach(guilds -> guilds.getController().addRolesToMember(guilds.getMember(e.getAuthor()), e.getJDA().getRolesByName(InstantVerify.discordRole, true)).complete());
-                    e.getAuthor().openPrivateChannel().queue(channel -> e.getChannel().sendMessage("Du hast dich erfolgreich verifiziert! Wir sehn uns. ;)").queue());
-                    VerifyCommand.verifying.remove(e.getAuthor().getName());
-                }
+                e.getJDA().getGuilds().forEach(guilds -> guilds.getController().addRolesToMember(guilds.getMember(e.getAuthor()), e.getJDA().getRolesByName(InstantVerify.discordRole, true)).complete());
+                e.getAuthor().openPrivateChannel().queue(channel -> e.getChannel().sendMessage("Du hast dich erfolgreich verifiziert! Wir sehn uns. ;)").queue());
+                VerifyCommand.verifying.remove(e.getAuthor().getName());
             } else {
                 e.getAuthor().openPrivateChannel().queue(channel -> e.getChannel().sendMessage("Uppps... Versuchs nochmal!").queue());
             }

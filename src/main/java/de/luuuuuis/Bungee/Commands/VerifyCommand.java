@@ -1,10 +1,10 @@
 /*
- * Developed by Luuuuuis on 02.04.19 18:31.
- * Last modified 02.04.19 18:31.
+ * Developed by Luuuuuis on 02.04.19 19:39.
+ * Last modified 02.04.19 18:51.
  * Copyright (c) 2019.
  */
 
-package de.luuuuuis.Bungee.Minecraft;
+package de.luuuuuis.Bungee.Commands;
 
 import com.github.theholywaffle.teamspeak3.TS3ApiAsync;
 import com.github.theholywaffle.teamspeak3.api.ClientProperty;
@@ -53,7 +53,7 @@ public class VerifyCommand extends Command {
             if (Discord.getJda() != null) {
                 usage += "|Discord ID";
             }
-            usage += "/Status>";
+            usage += "|Status>";
             p.sendMessage(usage);
         } else {
             if (args[0].equalsIgnoreCase("author") || args[0].equalsIgnoreCase("version") || args[0].equalsIgnoreCase("status")) {
@@ -108,7 +108,7 @@ public class VerifyCommand extends Command {
                     return;
                 }
                 verifying.put(user.getName(), p.getName());
-                user.openPrivateChannel().queue(channel -> channel.sendMessage("Hi " + user.getAsMention() + ",\nBitte sende mir dein Minecraft Namen, damit wir dich überprüfen können." +
+                user.openPrivateChannel().queue(channel -> channel.sendMessage("Hi " + user.getAsMention() + ",\nBitte sende mir dein Commands Namen, damit wir dich überprüfen können." +
                         "\nFalls dies nicht dein Account ist, schließe diesen Chat einfach.").queue());
                 p.sendMessage(InstantVerify.prefix + "Der Discord Bot hat dir eine Nachricht gesendet.");
                 return;
@@ -140,7 +140,7 @@ public class VerifyCommand extends Command {
                                 p.sendMessage(InstantVerify.prefix + "§aDu hast dich erfolgreich verifiziert!");
                             }
                         } else {
-                            p.sendMessage(InstantVerify.prefix + "§4Wir konnten dich leider nicht verifizieren, da deine IP auf dem Minecraft Server eine andere als auf dem TeamSpeak ist!");
+                            p.sendMessage(InstantVerify.prefix + "§4Wir konnten dich leider nicht verifizieren, da deine IP auf dem Commands Server eine andere als auf dem TeamSpeak ist!");
                         }
                     } else {
                         p.sendMessage(InstantVerify.prefix + "§cDu hast dich bereits verifiziert.");
@@ -169,7 +169,7 @@ public class VerifyCommand extends Command {
                                 p.sendMessage(InstantVerify.prefix + "§aDu hast dich erfolgreich verifiziert!");
                             }
                         } else {
-                            p.sendMessage(InstantVerify.prefix + "§4Wir konnten dich leider nicht verifizieren, da deine IP auf dem Minecraft Server eine andere als auf dem TeamSpeak ist!");
+                            p.sendMessage(InstantVerify.prefix + "§4Wir konnten dich leider nicht verifizieren, da deine IP auf dem Commands Server eine andere als auf dem TeamSpeak ist!");
                         }
                     } else {
                         p.sendMessage(InstantVerify.prefix + "§cDu hast dich bereits verifiziert.");

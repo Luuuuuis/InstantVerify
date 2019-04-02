@@ -1,9 +1,11 @@
 name: InstantVerify
 version: 1.5.02.042019
-main: de.luuuuuis.Bungee.InstantVerify
+main: de.luuuuuis.Spigot.InstantVerify
 author: Luuuuuis
 website: https://github.com/Luuuuuis/InstantVerify
 prefix: InstantVerify
 
 commands:
   verify:
+    description: verify command
+    aliases: [InstantVerify, IV]
