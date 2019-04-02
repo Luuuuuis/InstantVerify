@@ -1,6 +1,6 @@
 /*
- * Developed by Luuuuuis on 16.03.19 19:32.
- * Last modified 16.03.19 19:32.
+ * Developed by Luuuuuis on 02.04.19 18:04.
+ * Last modified 02.04.19 17:52.
  * Copyright (c) 2019.
  */
 
@@ -16,13 +16,6 @@ import net.md_5.bungee.api.ProxyServer;
 
 import java.io.IOException;
 
-/**
- * Author: Luuuuuis
- * Project: InstantVerify
- * Package: de.luuuuuis.Bungee.Discord
- * Date: 02.01.2019
- * Time 19:13
- */
 class Events extends ListenerAdapter {
 
     @SuppressWarnings("UnstableApiUsage")
@@ -37,25 +30,18 @@ class Events extends ListenerAdapter {
                 ProxyServer.getInstance().getPluginManager().callEvent(verifyEvent);
                 if (!verifyEvent.isCancelled()) {
                     e.getJDA().getGuilds().forEach(guilds -> guilds.getController().addRolesToMember(guilds.getMember(e.getAuthor()), e.getJDA().getRolesByName(InstantVerify.discordRole, true)).complete());
-                    e.getAuthor().openPrivateChannel().queue(channel -> {
-                        e.getChannel().sendMessage("Thanks for verifying. See you on the Discord!").queue();
-                    });
+                    e.getAuthor().openPrivateChannel().queue(channel -> e.getChannel().sendMessage("Du hast dich erfolgreich verifiziert! Wir sehn uns. ;)").queue());
                     VerifyCommand.verifying.remove(e.getAuthor().getName());
                 }
             } else {
-                e.getAuthor().openPrivateChannel().queue(channel -> {
-                    e.getChannel().sendMessage("Opps... Maybe wrong Credentials? Try again!").queue();
-                });
+                e.getAuthor().openPrivateChannel().queue(channel -> e.getChannel().sendMessage("Uppps... Versuchs nochmal!").queue());
             }
         } else {
             e.getAuthor().openPrivateChannel().queue(channel -> {
                 try {
-                    e.getChannel().sendMessage("Have you ever tried running /verify <Discord ID> on our Minecraft server? If so, please try again. To see your Discord ID right click on your name and then copy ID. " +
-                            "If that doesn't solve your problem, please contact a supporter on our discord.")
+                    e.getChannel().sendMessage("Hast du schon mal versucht /verify <Discord ID> auf dem Minecraft Server auszuführen? Falls du deine Discord ID nicht weißt, mach ein Rechtsklick auf dein Namen und kopier sie.. " +
+                            "Falls du sonst noch Probleme hast, kannst du gerne ein Teammitglied anschreiben.")
                             .addFile(ByteStreams.toByteArray(InstantVerify.class.getResourceAsStream("/Copy_ID.png")), "Copy_ID.png")
-                            .queue();
-                    e.getChannel().sendMessage("To find out the TeamSpeak Unique ID click [> Tools > Indentities]. Then select your identity. Most of the time this is \"Default\". Then copy the unique ID.")
-                            .addFile(ByteStreams.toByteArray(InstantVerify.class.getResourceAsStream("/UniqueID.png")), "UniqueID.png")
                             .queue();
                 } catch (IOException e1) {
                     e1.printStackTrace();
