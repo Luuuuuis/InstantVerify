@@ -1,6 +1,6 @@
 /*
- * Developed by Luuuuuis on 07.04.19 11:43.
- * Last modified 07.04.19 11:41.
+ * Developed by Luuuuuis on 07.04.19 20:55.
+ * Last modified 07.04.19 20:07.
  * Copyright (c) 2019.
  */
 
@@ -10,27 +10,24 @@ import de.luuuuuis.Bungee.Commands.VerifyCommand;
 import de.luuuuuis.Bungee.Discord.Discord;
 import de.luuuuuis.Bungee.Listener.Login;
 import de.luuuuuis.Bungee.TeamSpeak.TeamSpeak;
+import de.luuuuuis.Bungee.misc.ServerConfig;
+import de.luuuuuis.Bungee.misc.Update;
 import net.md_5.bungee.api.plugin.Plugin;
 import net.md_5.bungee.api.plugin.PluginManager;
 
 public class InstantVerify extends Plugin {
 
-    public static String prefix;
     public static String discordRole;
-    public static String version;
-    public static ServerConfig serverConfig;
-    private static InstantVerify instance;
-
-    public static InstantVerify getInstance() {
-        return instance;
-    }
+    private String prefix;
+    private ServerConfig serverConfig;
+    private TeamSpeak teamSpeak;
+    private Update update;
 
     @Override
     public void onEnable() {
         super.onEnable();
-        instance = this;
 
-        System.out.println("Thanks for using\n" +
+        System.out.println("You are using\n" +
                 " __     __   __     ______     ______   ______     __   __     ______   __   __   ______     ______     __     ______   __  __    \n" +
                 "/\\ \\   /\\ \"-.\\ \\   /\\  ___\\   /\\__  _\\ /\\  __ \\   /\\ \"-.\\ \\   /\\__  _\\ /\\ \\ / /  /\\  ___\\   /\\  == \\   /\\ \\   /\\  ___\\ /\\ \\_\\ \\   \n" +
                 "\\ \\ \\  \\ \\ \\-.  \\  \\ \\___  \\  \\/_/\\ \\/ \\ \\  __ \\  \\ \\ \\-.  \\  \\/_/\\ \\/ \\ \\ \\'/   \\ \\  __\\   \\ \\  __<   \\ \\ \\  \\ \\  __\\ \\ \\____ \\  \n" +
@@ -46,13 +43,13 @@ public class InstantVerify extends Plugin {
         /*
          * ServerConfig
          */
-        serverConfig = new ServerConfig();
+        serverConfig = new ServerConfig(this);
 
         /*
          * Starts the TeamSpeak Bot
          */
         if (!serverConfig.getTeamSpeakCredentials().get("password").toString().equals("yourPassword")) {
-            new TeamSpeak();
+            teamSpeak = new TeamSpeak(this);
         }
 
         /*
@@ -69,26 +66,46 @@ public class InstantVerify extends Plugin {
          */
 
         PluginManager pm = getProxy().getPluginManager();
-        pm.registerCommand(this, new VerifyCommand("verify"));
+        pm.registerCommand(this, new VerifyCommand("verify", this));
         if (serverConfig.getTeamSpeakCredentials().get("Instant").equals(true)) {
-            pm.registerListener(this, new Login());
+            pm.registerListener(this, new Login(this));
         }
 
         /*
          * Updater
          */
-        version = getDescription().getVersion();
-        new Update(version, getFile());
+        update = new Update(this);
+        update.searchForUpdate();
     }
 
     @Override
     public void onDisable() {
         super.onDisable();
-        TeamSpeak.getQuery().exit();
+        teamSpeak.getQuery().exit();
         Discord.getJda().shutdownNow();
         System.out.println("InstantVerify >> Did you like it? Yes/No? Drop me a line and let me know what's on your mind! \n\n" +
                 "Discord for Support: https://discord.gg/2aSSGcz\n" +
                 "GitHub: https://github.com/Luuuuuis/InstantVerify\n" +
                 "GitHub Issue: https://github.com/Luuuuuis/InstantVerify/issue\n");
+    }
+
+    public TeamSpeak getTeamSpeak() {
+        return teamSpeak;
+    }
+
+    public String getPrefix() {
+        return prefix;
+    }
+
+    public void setPrefix(String prefix) {
+        this.prefix = prefix;
+    }
+
+    public ServerConfig getServerConfig() {
+        return serverConfig;
+    }
+
+    public Update getUpdate() {
+        return update;
     }
 }

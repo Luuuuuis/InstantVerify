@@ -1,6 +1,6 @@
 /*
- * Developed by Luuuuuis on 16.03.19 19:32.
- * Last modified 16.03.19 19:30.
+ * Developed by Luuuuuis on 07.04.19 20:55.
+ * Last modified 07.04.19 18:19.
  * Copyright (c) 2019.
  */
 
@@ -20,7 +20,9 @@ import java.util.concurrent.Executors;
 
 class Events {
 
-    Events(TS3ApiAsync apiAsync, Integer serverGroup) {
+    Events(InstantVerify instantVerify) {
+
+        TS3ApiAsync apiAsync = instantVerify.getTeamSpeak().getApi();
 
         apiAsync.registerAllEvents();
         apiAsync.addTS3Listeners(new TS3Listener() {
@@ -35,7 +37,7 @@ class Events {
 
                     List<Integer> groups = new ArrayList<>();
                     Arrays.stream(clientInfo.getServerGroups()).forEach(groups::add);
-                    if (!groups.contains(serverGroup)) {
+                    if (!groups.contains(instantVerify.getTeamSpeak().getServerGroup())) {
                         Executor executor = Executors.newSingleThreadExecutor();
 
                         Collection<ProxiedPlayer> playerList = ProxyServer.getInstance().getPlayers();
@@ -47,9 +49,9 @@ class Events {
                             VerifyEvent verifyEvent = new VerifyEvent();
                             ProxyServer.getInstance().getPluginManager().callEvent(verifyEvent);
                             if (!verifyEvent.isCancelled()) {
-                                apiAsync.addClientToServerGroup(serverGroup, clientInfo.getDatabaseId());
+                                apiAsync.addClientToServerGroup(instantVerify.getTeamSpeak().getServerGroup(), clientInfo.getDatabaseId());
                                 apiAsync.editDatabaseClient(clientInfo.getDatabaseId(), Collections.singletonMap(ClientProperty.CLIENT_DESCRIPTION,
-                                        InstantVerify.serverConfig.getTeamSpeakCredentials().get("Description").toString()
+                                        instantVerify.getServerConfig().getTeamSpeakCredentials().get("Description").toString()
                                                 .replace("%Name", player.getName())
                                                 .replace("%UUID", player.getUniqueId().toString())
                                 ));
