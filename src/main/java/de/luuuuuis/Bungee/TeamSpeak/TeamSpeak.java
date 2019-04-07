@@ -1,6 +1,6 @@
 /*
- * Developed by Luuuuuis on 16.03.19 19:32.
- * Last modified 16.03.19 19:30.
+ * Developed by Luuuuuis on 07.04.19 20:55.
+ * Last modified 07.04.19 18:19.
  * Copyright (c) 2019.
  */
 
@@ -9,39 +9,38 @@ package de.luuuuuis.Bungee.TeamSpeak;
 import com.github.theholywaffle.teamspeak3.TS3ApiAsync;
 import com.github.theholywaffle.teamspeak3.TS3Config;
 import com.github.theholywaffle.teamspeak3.TS3Query;
-import com.github.theholywaffle.teamspeak3.api.exception.TS3Exception;
 import de.luuuuuis.Bungee.InstantVerify;
 
 public class TeamSpeak {
 
-    private static TS3ApiAsync api;
-    private static TS3Query query;
-    private static Integer serverGroup;
+    private TS3ApiAsync api;
+    private TS3Query query;
+    private Integer serverGroup;
 
-    public TeamSpeak() {
+    public TeamSpeak(InstantVerify instantVerify) {
 
         try {
             Thread thread = new Thread(() -> {
                 TS3Config config = new TS3Config();
                 query = new TS3Query(config);
                 api = query.getAsyncApi();
-                serverGroup = Integer.parseInt(InstantVerify.serverConfig.getTeamSpeakCredentials().get("ServerGroup").toString());
+                serverGroup = Integer.parseInt(instantVerify.getServerConfig().getTeamSpeakCredentials().get("ServerGroup").toString());
 
-                config.setHost(InstantVerify.serverConfig.getTeamSpeakCredentials().get("Host").toString());
+                config.setHost(instantVerify.getServerConfig().getTeamSpeakCredentials().get("Host").toString());
                 query.connect();
-                api.login(InstantVerify.serverConfig.getTeamSpeakCredentials().get("username").toString(), InstantVerify.serverConfig.getTeamSpeakCredentials().get("password").toString());
-                api.selectVirtualServerById(Integer.parseInt(InstantVerify.serverConfig.getTeamSpeakCredentials().get("VirtualServerId").toString()));
-                api.setNickname(InstantVerify.serverConfig.getTeamSpeakCredentials().get("Nickname").toString());
+                api.login(instantVerify.getServerConfig().getTeamSpeakCredentials().get("username").toString(), instantVerify.getServerConfig().getTeamSpeakCredentials().get("password").toString());
+                api.selectVirtualServerById(Integer.parseInt(instantVerify.getServerConfig().getTeamSpeakCredentials().get("VirtualServerId").toString()));
+                api.setNickname(instantVerify.getServerConfig().getTeamSpeakCredentials().get("Nickname").toString());
 
                 System.out.println("InstantVerify >> Successfully connected to TeamSpeak");
 
-                if (InstantVerify.serverConfig.getTeamSpeakCredentials().get("Instant").equals(true)) {
+                if (instantVerify.getServerConfig().getTeamSpeakCredentials().get("Instant").equals(true)) {
                     assert api != null;
-                    new Events(api, serverGroup);
+                    new Events(instantVerify);
                 }
             });
             thread.start();
-        } catch (TS3Exception ex) {
+        } catch (Exception ex) {
             System.err.println("InstantVerify >> Cannot connect to the TeamSpeak server! Check your config to make sure you are using the correct credentials.");
             query.exit();
             api.logout();
@@ -51,15 +50,15 @@ public class TeamSpeak {
 
     }
 
-    public static TS3ApiAsync getApi() {
+    public TS3ApiAsync getApi() {
         return api;
     }
 
-    public static TS3Query getQuery() {
+    public TS3Query getQuery() {
         return query;
     }
 
-    public static Integer getServerGroup() {
+    public Integer getServerGroup() {
         return serverGroup;
     }
 }
