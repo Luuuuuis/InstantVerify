@@ -1,6 +1,6 @@
 /*
- * Developed by Luuuuuis on 02.04.19 19:39.
- * Last modified 02.04.19 19:39.
+ * Developed by Luuuuuis on 07.04.19 11:43.
+ * Last modified 07.04.19 11:41.
  * Copyright (c) 2019.
  */
 
@@ -8,7 +8,7 @@ package de.luuuuuis.Bungee;
 
 import de.luuuuuis.Bungee.Commands.VerifyCommand;
 import de.luuuuuis.Bungee.Discord.Discord;
-import de.luuuuuis.Bungee.Listener.PostLogin;
+import de.luuuuuis.Bungee.Listener.Login;
 import de.luuuuuis.Bungee.TeamSpeak.TeamSpeak;
 import net.md_5.bungee.api.plugin.Plugin;
 import net.md_5.bungee.api.plugin.PluginManager;
@@ -71,7 +71,7 @@ public class InstantVerify extends Plugin {
         PluginManager pm = getProxy().getPluginManager();
         pm.registerCommand(this, new VerifyCommand("verify"));
         if (serverConfig.getTeamSpeakCredentials().get("Instant").equals(true)) {
-            pm.registerListener(this, new PostLogin());
+            pm.registerListener(this, new Login());
         }
 
         /*
