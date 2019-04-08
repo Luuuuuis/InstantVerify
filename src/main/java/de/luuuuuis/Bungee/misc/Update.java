@@ -1,6 +1,6 @@
 /*
- * Developed by Luuuuuis on 07.04.19 20:55.
- * Last modified 07.04.19 20:07.
+ * Developed by Luuuuuis on 08.04.19 21:14.
+ * Last modified 08.04.19 21:07.
  * Copyright (c) 2019.
  */
 
@@ -26,7 +26,7 @@ public class Update {
         this.instantVerify = instantVerify;
     }
 
-    public void searchForUpdate() {
+    public boolean searchForUpdate() {
         URL url;
         HttpURLConnection connection = null;
         try {
@@ -75,17 +75,20 @@ public class Update {
                         System.out.println("InstantVerify >> Changelog can be viewed at GitHub: https://github.com/Luuuuuis/InstantVerify/releases");
 
                         setVersion(instantVerify.getDescription().getVersion() + " (outdated)");
-
                     });
                     thread.start();
 
+                    return true;
+
                 }
             } else {
-                setVersion(instantVerify.getDescription().getVersion() + " (latest)");
+                setVersion(instantVerify.getDescription().getVersion());
+                return false;
             }
         } catch (IOException ex) {
             ex.printStackTrace();
         }
+        return false;
     }
 
     public String getVersion() {

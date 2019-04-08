@@ -1,6 +1,6 @@
 /*
- * Developed by Luuuuuis on 07.04.19 20:55.
- * Last modified 07.04.19 20:35.
+ * Developed by Luuuuuis on 08.04.19 21:14.
+ * Last modified 08.04.19 21:12.
  * Copyright (c) 2019.
  */
 
@@ -50,7 +50,7 @@ public class ServerConfig {
                 try (FileWriter fileWriter = new FileWriter(instantVerify.getDataFolder().getPath() + "/config.json")) {
 
                     JSONObject jsonObject = new JSONObject();
-                    jsonObject.put("Prefix", "&eInstantVerify &8>> &7");
+                    jsonObject.put("Prefix", "&eInstantVerify &8>>");
 
                     JSONObject discord = new JSONObject();
                     discord.put("Token", "BOT-TOKEN");

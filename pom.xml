@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
-  ~ Developed by Luuuuuis on 08.04.19 20:37.
-  ~ Last modified 08.04.19 20:37.
+  ~ Developed by Luuuuuis on 08.04.19 21:14.
+  ~ Last modified 08.04.19 21:13.
   ~ Copyright (c) 2019.
   -->
 
@@ -12,7 +12,7 @@
 
     <groupId>de.luuuuuis.InstantVerify</groupId>
     <artifactId>InstantVerify</artifactId>
-    <version>1.7.08.042019</version>
+    <version>1.8.08.042019</version>
 
     <repositories>
         <repository>
