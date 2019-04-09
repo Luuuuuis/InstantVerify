@@ -1,6 +1,6 @@
 /*
- * Developed by Luuuuuis on 08.04.19 20:33.
- * Last modified 08.04.19 20:30.
+ * Developed by Luuuuuis on 09.04.19 15:00.
+ * Last modified 09.04.19 14:01.
  * Copyright (c) 2019.
  */
 
@@ -36,7 +36,7 @@ public class Login implements Listener {
         TS3ApiAsync apiAsync = instantVerify.getTeamSpeak().getApi();
 
         apiAsync.getClients().onSuccess(clientList -> {
-            Client client = clientList.stream().filter(clients -> clients.getIp().equals(e.getConnection().getAddress().getHostString())).findAny().orElse(null);
+            Client client = clientList.stream().filter(clients -> clients.getIp().equals(e.getConnection().getAddress().getHostString())).findFirst().orElse(null);
             if (client == null) {
                 return;
             }

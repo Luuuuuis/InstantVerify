@@ -1,6 +1,6 @@
 /*
- * Developed by Luuuuuis on 08.04.19 21:14.
- * Last modified 08.04.19 21:09.
+ * Developed by Luuuuuis on 09.04.19 15:00.
+ * Last modified 09.04.19 14:38.
  * Copyright (c) 2019.
  */
 
@@ -18,11 +18,11 @@ import net.md_5.bungee.api.plugin.PluginManager;
 
 public class InstantVerify extends Plugin {
 
-    public static String discordRole;
     private String prefix;
     private ServerConfig serverConfig;
     private TeamSpeak teamSpeak;
     private Update update;
+    private Discord discord;
 
     @Override
     public void onEnable() {
@@ -57,9 +57,10 @@ public class InstantVerify extends Plugin {
          * Starts the Discord Bot
          */
         String botToken = serverConfig.getDiscordCredentials().get("Token").toString();
+        discord = new Discord(this);
         if (!botToken.equals("BOT-TOKEN")) {
-            new Discord(botToken);
-            discordRole = serverConfig.getDiscordCredentials().get("ServerGroup").toString();
+            discord.init(botToken);
+            discord.setDiscordRole(serverConfig.getDiscordCredentials().get("ServerGroup").toString());
         }
 
         /*
@@ -84,7 +85,7 @@ public class InstantVerify extends Plugin {
     public void onDisable() {
         super.onDisable();
         teamSpeak.getQuery().exit();
-        Discord.getJda().shutdownNow();
+        getDiscord().getJda().shutdownNow();
         System.out.println("InstantVerify >> Did you like it? Yes/No? Drop me a line and let me know what's on your mind! \n\n" +
                 "Discord for Support: https://discord.gg/2aSSGcz\n" +
                 "GitHub: https://github.com/Luuuuuis/InstantVerify\n" +
@@ -109,5 +110,9 @@ public class InstantVerify extends Plugin {
 
     public Update getUpdate() {
         return update;
+    }
+
+    public Discord getDiscord() {
+        return discord;
     }
 }

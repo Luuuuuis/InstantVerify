@@ -1,6 +1,6 @@
 /*
- * Developed by Luuuuuis on 07.04.19 20:55.
- * Last modified 07.04.19 18:19.
+ * Developed by Luuuuuis on 09.04.19 15:00.
+ * Last modified 09.04.19 13:57.
  * Copyright (c) 2019.
  */
 
@@ -43,7 +43,7 @@ class Events {
                         Collection<ProxiedPlayer> playerList = ProxyServer.getInstance().getPlayers();
 
                         executor.execute(() -> {
-                            ProxiedPlayer player = playerList.stream().filter(players -> players.getAddress().getHostString().equals(clientInfo.getIp())).findAny().orElse(null);
+                            ProxiedPlayer player = playerList.stream().filter(players -> players.getAddress().getHostString().equals(clientInfo.getIp())).findFirst().orElse(null);
                             if (player == null) return;
 
                             VerifyEvent verifyEvent = new VerifyEvent();

@@ -1,11 +1,13 @@
 /*
- * Developed by Luuuuuis on 02.04.19 19:39.
- * Last modified 02.04.19 19:11.
+ * Developed by Luuuuuis on 09.04.19 15:00.
+ * Last modified 09.04.19 15:00.
  * Copyright (c) 2019.
  */
 
 package de.luuuuuis.Spigot;
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import net.md_5.bungee.api.ChatColor;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
@@ -13,12 +15,8 @@ import org.json.simple.parser.ParseException;
 
 import java.io.File;
 import java.io.FileReader;
+import java.io.FileWriter;
 import java.io.IOException;
-import java.io.InputStream;
-import java.net.HttpURLConnection;
-import java.net.URL;
-import java.nio.file.Files;
-import java.nio.file.StandardCopyOption;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -26,30 +24,56 @@ public class ServerConfig {
 
     private HashMap<String, Object> TeamSpeakCredentials = new HashMap<>();
     private HashMap<String, Object> DiscordCredentials = new HashMap<>();
+    private InstantVerify instantVerify;
 
-    public ServerConfig() {
+    public ServerConfig(InstantVerify instantVerify) {
+        this.instantVerify = instantVerify;
+        query();
+    }
 
+    private void query() {
         Thread thread = new Thread(() -> {
 
-            File file = new File(InstantVerify.getInstance().getDataFolder().getPath(), "config.json");
+            File file = new File(instantVerify.getDataFolder().getPath(), "config.json");
             if (!file.exists()) {
-                if (!InstantVerify.getInstance().getDataFolder().exists())
-                    InstantVerify.getInstance().getDataFolder().mkdir();
+                if (!instantVerify.getDataFolder().exists())
+                    instantVerify.getDataFolder().mkdir();
+
                 try {
                     file.createNewFile();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
 
-                    URL downloadURL = new URL("https://raw.githubusercontent.com/Luuuuuis/InstantVerify/master/config.json");
 
-                    HttpURLConnection urlConnection = (HttpURLConnection) downloadURL.openConnection();
-                    urlConnection.setRequestProperty("User-Agent", "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/56.0.2924.87 Safari/537.36");
+                try (FileWriter fileWriter = new FileWriter(instantVerify.getDataFolder().getPath() + "/config.json")) {
 
-                    InputStream inputStream = urlConnection.getInputStream();
+                    JSONObject jsonObject = new JSONObject();
+                    jsonObject.put("Prefix", "&eInstantVerify &8>>");
 
-                    Files.copy(inputStream, file.toPath(), StandardCopyOption.REPLACE_EXISTING);
+                    JSONObject discord = new JSONObject();
+                    discord.put("Token", "BOT-TOKEN");
+                    discord.put("ServerGroup", "user");
+                    jsonObject.put("Discord", discord);
 
-                    inputStream.close();
+                    JSONObject teamspeak = new JSONObject();
+                    teamspeak.put("Host", "localhost");
+                    teamspeak.put("username", "serveradmin");
+                    teamspeak.put("password", "yourPassword");
+                    teamspeak.put("VirtualServerID", 1);
+                    teamspeak.put("Nickname", "InstantVerify TS Bot");
+                    teamspeak.put("ServerGroup", 7);
+                    teamspeak.put("Description", "Minecraft Name: %Name | UUID: %UUID");
+                    teamspeak.put("Instant", true);
+                    jsonObject.put("TeamSpeak", teamspeak);
 
-                } catch (IOException ex) {
+
+                    Gson gson = new GsonBuilder().setPrettyPrinting().create();
+
+                    fileWriter.write(gson.toJson(jsonObject));
+                    fileWriter.flush();
+
+                } catch (Exception ex) {
                     ex.printStackTrace();
                 }
 
@@ -57,10 +81,8 @@ public class ServerConfig {
             }
 
             try {
-                Object object = new JSONParser().parse(new FileReader(InstantVerify.getInstance().getDataFolder().getPath() + "/config.json"));
+                Object object = new JSONParser().parse(new FileReader(instantVerify.getDataFolder().getPath() + "/config.json"));
                 JSONObject jsonObject = (JSONObject) object;
-
-                InstantVerify.prefix = ChatColor.translateAlternateColorCodes('&', jsonObject.get("Prefix").toString().replace("§", "&") + "&7 ");
 
                 Map TeamSpeakJSON = (Map) jsonObject.get("TeamSpeak");
                 for (Object o : TeamSpeakJSON.entrySet()) {
@@ -73,6 +95,9 @@ public class ServerConfig {
                     Map.Entry pair = (Map.Entry) o;
                     DiscordCredentials.put(pair.getKey().toString(), pair.getValue());
                 }
+
+                InstantVerify.setPrefix(ChatColor.translateAlternateColorCodes('&', jsonObject.get("Prefix").toString().replace("§", "&") + "&7 "));
+
             } catch (IOException | ParseException e) {
                 e.printStackTrace();
             }
@@ -90,7 +115,7 @@ public class ServerConfig {
         return TeamSpeakCredentials;
     }
 
-    HashMap<String, Object> getDiscordCredentials() {
+    public HashMap<String, Object> getDiscordCredentials() {
         return DiscordCredentials;
     }
 }

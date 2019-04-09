@@ -1,6 +1,6 @@
 /*
- * Developed by Luuuuuis on 07.04.19 20:55.
- * Last modified 07.04.19 19:56.
+ * Developed by Luuuuuis on 09.04.19 15:00.
+ * Last modified 09.04.19 14:41.
  * Copyright (c) 2019.
  */
 
@@ -9,7 +9,6 @@ package de.luuuuuis.Bungee.Commands;
 import com.github.theholywaffle.teamspeak3.TS3ApiAsync;
 import com.github.theholywaffle.teamspeak3.api.ClientProperty;
 import com.github.theholywaffle.teamspeak3.api.wrapper.Client;
-import de.luuuuuis.Bungee.Discord.Discord;
 import de.luuuuuis.Bungee.Events.VerifyEvent;
 import de.luuuuuis.Bungee.InstantVerify;
 import net.dv8tion.jda.core.entities.User;
@@ -22,7 +21,6 @@ import java.util.*;
 
 public class VerifyCommand extends Command {
 
-    public static HashMap<String, String> verifying = new HashMap<>();
     private InstantVerify instantVerify;
 
     public VerifyCommand(String name, InstantVerify instantVerify) {
@@ -46,7 +44,7 @@ public class VerifyCommand extends Command {
 
             if (apiAsync != null) {
                 apiAsync.getClients().onSuccess(clientList -> {
-                    Client client = clientList.stream().filter(clients -> clients.getIp().equals(p.getAddress().getHostString())).findAny().orElse(null);
+                    Client client = clientList.stream().filter(clients -> clients.getIp().equals(p.getAddress().getHostString())).findFirst().orElse(null);
                     if (client != null) {
 
                         List<Integer> groups = new ArrayList<>();
@@ -73,7 +71,7 @@ public class VerifyCommand extends Command {
             if (apiAsync != null) {
                 stringJoiner.add("TeamSpeak Name|TeamSpeak Unique ID");
             }
-            if (Discord.getJda() != null) {
+            if (instantVerify.getDiscord().getJda() != null) {
                 stringJoiner.add("Discord ID");
             }
             stringJoiner.add("Status");
@@ -83,7 +81,7 @@ public class VerifyCommand extends Command {
                 p.sendMessage("");
 
                 p.sendMessage("§7TeamSpeak: " + (apiAsync == null ? "§4Offline" : "§aOnline"));
-                p.sendMessage("§7Discord: " + (Discord.getJda() == null ? "§4Offline" : "§aOnline"));
+                p.sendMessage("§7Discord: " + (instantVerify.getDiscord().getJda() == null ? "§4Offline" : "§aOnline"));
 
                 p.sendMessage("");
                 p.sendMessage("§9§oAutor: Luuuuuis");
@@ -92,16 +90,16 @@ public class VerifyCommand extends Command {
                 p.sendMessage("§9§oVersion: " + instantVerify.getUpdate().getVersion());
                 p.sendMessage("");
             } else if (args[0].length() == 18) {
-                if (Discord.getJda() == null) {
+                if (instantVerify.getDiscord().getJda() == null) {
                     p.sendMessage(instantVerify.getPrefix() + "§4Wir konnten dich leider nicht verifizieren, da keine Verbindung zu Discord besteht! :(");
                     return;
                 }
-                User user = Discord.getJda().getUserById(args[0]);
+                User user = instantVerify.getDiscord().getJda().getUserById(args[0]);
                 if (user == null) {
                     p.sendMessage(instantVerify.getPrefix() + "Bitte betrete unseren Discord und überprüfe deine Discord ID.");
                     return;
                 }
-                verifying.put(user.getName(), p.getName());
+                instantVerify.getDiscord().getVerifying().put(user.getName(), p.getName());
                 user.openPrivateChannel().queue(channel -> channel.sendMessage("Hi " + user.getAsMention() + ",\nBitte sende mir dein Commands Namen, damit wir dich überprüfen können." +
                         "\nFalls dies nicht dein Account ist, schließe diesen Chat einfach.").queue());
                 p.sendMessage(instantVerify.getPrefix() + "Der Discord Bot hat dir eine Nachricht gesendet.");

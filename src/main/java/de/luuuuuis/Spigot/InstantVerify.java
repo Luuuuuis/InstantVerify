@@ -1,6 +1,6 @@
 /*
- * Developed by Luuuuuis on 02.04.19 19:39.
- * Last modified 02.04.19 19:36.
+ * Developed by Luuuuuis on 09.04.19 15:00.
+ * Last modified 09.04.19 15:00.
  * Copyright (c) 2019.
  */
 
@@ -20,16 +20,14 @@ public class InstantVerify extends JavaPlugin {
     public static String discordRole;
     public static String version;
     public static ServerConfig serverConfig;
-    private static InstantVerify instance;
 
-    public static InstantVerify getInstance() {
-        return instance;
+    public static void setPrefix(String prefix) {
+        InstantVerify.prefix = prefix;
     }
 
     @Override
     public void onEnable() {
         super.onEnable();
-        instance = this;
 
         System.out.println("Thanks for using\n" +
                 " __     __   __     ______     ______   ______     __   __     ______   __   __   ______     ______     __     ______   __  __    \n" +
@@ -47,7 +45,7 @@ public class InstantVerify extends JavaPlugin {
         /*
          * ServerConfig
          */
-        serverConfig = new ServerConfig();
+        serverConfig = new ServerConfig(this);
 
         /*
          * Starts the TeamSpeak Bot
@@ -79,18 +77,16 @@ public class InstantVerify extends JavaPlugin {
          * Updater
          */
         version = getDescription().getVersion();
-        new Update(version, getFile());
     }
 
     @Override
     public void onDisable() {
         super.onDisable();
         TeamSpeak.getQuery().exit();
-//        Discord.getJda().shutdownNow();
+        Discord.getJda().shutdownNow();
         System.out.println("InstantVerify >> Did you like it? Yes/No? Drop me a line and let me know what's on your mind! \n\n" +
                 "Discord for Support: https://discord.gg/2aSSGcz\n" +
                 "GitHub: https://github.com/Luuuuuis/InstantVerify\n" +
                 "GitHub Issue: https://github.com/Luuuuuis/InstantVerify/issue\n");
     }
-
 }

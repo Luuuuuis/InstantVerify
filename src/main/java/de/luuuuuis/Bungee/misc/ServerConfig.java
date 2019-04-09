@@ -1,6 +1,6 @@
 /*
- * Developed by Luuuuuis on 08.04.19 21:14.
- * Last modified 08.04.19 21:12.
+ * Developed by Luuuuuis on 09.04.19 15:00.
+ * Last modified 09.04.19 14:11.
  * Copyright (c) 2019.
  */
 
@@ -64,7 +64,7 @@ public class ServerConfig {
                     teamspeak.put("VirtualServerID", 1);
                     teamspeak.put("Nickname", "InstantVerify TS Bot");
                     teamspeak.put("ServerGroup", 7);
-                    teamspeak.put("Description", "Minecraft Name: %Name UUID: %UUID");
+                    teamspeak.put("Description", "Minecraft Name: %Name | UUID: %UUID");
                     teamspeak.put("Instant", true);
                     jsonObject.put("TeamSpeak", teamspeak);
 
