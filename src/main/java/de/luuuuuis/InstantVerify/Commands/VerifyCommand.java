@@ -1,16 +1,17 @@
 /*
- * Developed by Luuuuuis on 09.04.19 15:00.
- * Last modified 09.04.19 14:41.
+ * Developed by Luuuuuis on 09.04.19 19:55.
+ * Last modified 09.04.19 19:50.
  * Copyright (c) 2019.
  */
 
-package de.luuuuuis.Bungee.Commands;
+package de.luuuuuis.InstantVerify.Commands;
 
 import com.github.theholywaffle.teamspeak3.TS3ApiAsync;
 import com.github.theholywaffle.teamspeak3.api.ClientProperty;
 import com.github.theholywaffle.teamspeak3.api.wrapper.Client;
-import de.luuuuuis.Bungee.Events.VerifyEvent;
-import de.luuuuuis.Bungee.InstantVerify;
+import de.luuuuuis.InstantVerify.Database.PlayerInfo;
+import de.luuuuuis.InstantVerify.Events.VerifyEvent;
+import de.luuuuuis.InstantVerify.InstantVerify;
 import net.dv8tion.jda.core.entities.User;
 import net.md_5.bungee.api.CommandSender;
 import net.md_5.bungee.api.ProxyServer;
@@ -61,6 +62,7 @@ public class VerifyCommand extends Command {
                                                 .replace("%UUID", p.getUniqueId().toString())
                                 ));
                                 p.sendMessage(instantVerify.getPrefix() + "§aDu hast dich erfolgreich verifiziert!");
+                                instantVerify.getDbManager().getVerifyPlayer().update(p.getUniqueId(), client.getUniqueIdentifier(), null, null);
                             }
                         }
                     }
@@ -99,8 +101,15 @@ public class VerifyCommand extends Command {
                     p.sendMessage(instantVerify.getPrefix() + "Bitte betrete unseren Discord und überprüfe deine Discord ID.");
                     return;
                 }
-                instantVerify.getDiscord().getVerifying().put(user.getName(), p.getName());
-                user.openPrivateChannel().queue(channel -> channel.sendMessage("Hi " + user.getAsMention() + ",\nBitte sende mir dein Commands Namen, damit wir dich überprüfen können." +
+
+                PlayerInfo playerInfo = PlayerInfo.getPlayerInfo(p.getUniqueId().toString(), instantVerify);
+                if (playerInfo != null && playerInfo.getDiscordid() != null && playerInfo.getDiscordid().equals(user.getId())) {
+                    p.sendMessage(instantVerify.getPrefix() + "Du hast dich bereits verifiziert!");
+                    return;
+                }
+
+                instantVerify.getDiscord().getVerifying().put(user.getId(), p);
+                user.openPrivateChannel().queue(channel -> channel.sendMessage("Hi " + user.getAsMention() + ",\nBitte sende mir dein Minecraft Namen, damit wir dich überprüfen können." +
                         "\nFalls dies nicht dein Account ist, schließe diesen Chat einfach.").queue());
                 p.sendMessage(instantVerify.getPrefix() + "Der Discord Bot hat dir eine Nachricht gesendet.");
             } else if (args[0].endsWith("=") && args[0].length() == 28) {
@@ -129,6 +138,7 @@ public class VerifyCommand extends Command {
                                                 .replace("%UUID", p.getUniqueId().toString())
                                 ));
                                 p.sendMessage(instantVerify.getPrefix() + "§aDu hast dich erfolgreich verifiziert!");
+                                instantVerify.getDbManager().getVerifyPlayer().update(p.getUniqueId(), clientInfo.getUniqueIdentifier(), null, null);
                             }
                         } else {
                             p.sendMessage(instantVerify.getPrefix() + "§4Wir konnten dich leider nicht verifizieren, da deine IP auf dem Commands Server eine andere als auf dem TeamSpeak ist!");
@@ -163,6 +173,7 @@ public class VerifyCommand extends Command {
                                                 .replace("%UUID", p.getUniqueId().toString())
                                 ));
                                 p.sendMessage(instantVerify.getPrefix() + "§aDu hast dich erfolgreich verifiziert!");
+                                instantVerify.getDbManager().getVerifyPlayer().update(p.getUniqueId(), client.getUniqueIdentifier(), null, null);
                             }
                         } else {
                             p.sendMessage(instantVerify.getPrefix() + "§4Wir konnten dich leider nicht verifizieren, da deine IP auf dem Commands Server eine andere als auf dem TeamSpeak ist!");

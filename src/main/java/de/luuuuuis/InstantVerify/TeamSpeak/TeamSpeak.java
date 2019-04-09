@@ -1,15 +1,15 @@
 /*
- * Developed by Luuuuuis on 07.04.19 20:55.
- * Last modified 07.04.19 18:19.
+ * Developed by Luuuuuis on 09.04.19 19:55.
+ * Last modified 09.04.19 19:50.
  * Copyright (c) 2019.
  */
 
-package de.luuuuuis.Bungee.TeamSpeak;
+package de.luuuuuis.InstantVerify.TeamSpeak;
 
 import com.github.theholywaffle.teamspeak3.TS3ApiAsync;
 import com.github.theholywaffle.teamspeak3.TS3Config;
 import com.github.theholywaffle.teamspeak3.TS3Query;
-import de.luuuuuis.Bungee.InstantVerify;
+import de.luuuuuis.InstantVerify.InstantVerify;
 
 public class TeamSpeak {
 

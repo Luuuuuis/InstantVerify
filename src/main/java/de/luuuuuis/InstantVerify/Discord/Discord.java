@@ -1,17 +1,18 @@
 /*
- * Developed by Luuuuuis on 09.04.19 15:00.
- * Last modified 09.04.19 14:37.
+ * Developed by Luuuuuis on 09.04.19 19:55.
+ * Last modified 09.04.19 19:50.
  * Copyright (c) 2019.
  */
 
-package de.luuuuuis.Bungee.Discord;
+package de.luuuuuis.InstantVerify.Discord;
 
-import de.luuuuuis.Bungee.InstantVerify;
+import de.luuuuuis.InstantVerify.InstantVerify;
 import net.dv8tion.jda.core.AccountType;
 import net.dv8tion.jda.core.JDA;
 import net.dv8tion.jda.core.JDABuilder;
 import net.dv8tion.jda.core.OnlineStatus;
 import net.dv8tion.jda.core.entities.Game;
+import net.md_5.bungee.api.connection.ProxiedPlayer;
 
 import javax.security.auth.login.LoginException;
 import java.util.HashMap;
@@ -19,7 +20,7 @@ import java.util.HashMap;
 public class Discord {
 
     private JDA jda;
-    private HashMap<String, String> verifying = new HashMap<>();
+    private HashMap<String, ProxiedPlayer> verifying = new HashMap<>();
     private InstantVerify instantVerify;
     private String discordRole;
 
@@ -49,7 +50,7 @@ public class Discord {
         return jda;
     }
 
-    public HashMap<String, String> getVerifying() {
+    public HashMap<String, ProxiedPlayer> getVerifying() {
         return verifying;
     }
 

@@ -1,18 +1,19 @@
 /*
- * Developed by Luuuuuis on 09.04.19 15:00.
- * Last modified 09.04.19 14:38.
+ * Developed by Luuuuuis on 09.04.19 19:55.
+ * Last modified 09.04.19 19:50.
  * Copyright (c) 2019.
  */
 
-package de.luuuuuis.Bungee;
+package de.luuuuuis.InstantVerify;
 
-import de.luuuuuis.Bungee.Commands.IVUpdateCommand;
-import de.luuuuuis.Bungee.Commands.VerifyCommand;
-import de.luuuuuis.Bungee.Discord.Discord;
-import de.luuuuuis.Bungee.Listener.Login;
-import de.luuuuuis.Bungee.TeamSpeak.TeamSpeak;
-import de.luuuuuis.Bungee.misc.ServerConfig;
-import de.luuuuuis.Bungee.misc.Update;
+import de.luuuuuis.InstantVerify.Commands.IVUpdateCommand;
+import de.luuuuuis.InstantVerify.Commands.VerifyCommand;
+import de.luuuuuis.InstantVerify.Database.DBManager;
+import de.luuuuuis.InstantVerify.Discord.Discord;
+import de.luuuuuis.InstantVerify.Listener.Login;
+import de.luuuuuis.InstantVerify.TeamSpeak.TeamSpeak;
+import de.luuuuuis.InstantVerify.misc.ServerConfig;
+import de.luuuuuis.InstantVerify.misc.Update;
 import net.md_5.bungee.api.plugin.Plugin;
 import net.md_5.bungee.api.plugin.PluginManager;
 
@@ -23,6 +24,8 @@ public class InstantVerify extends Plugin {
     private TeamSpeak teamSpeak;
     private Update update;
     private Discord discord;
+
+    private DBManager dbManager;
 
     @Override
     public void onEnable() {
@@ -37,7 +40,7 @@ public class InstantVerify extends Plugin {
                 "\n\n" +
                 "Version: " + getDescription().getVersion() + "\n" +
                 "Support: https://discord.gg/2aSSGcz\n" +
-                "GitHub: https://github.com/Luuuuuis/InstantVerify\n"
+                "GitHub: https://github.com/Luuuuuis/InstantVerify"
         );
 
 
@@ -66,13 +69,18 @@ public class InstantVerify extends Plugin {
         /*
          * Commands Commands
          */
-
         PluginManager pm = getProxy().getPluginManager();
         pm.registerCommand(this, new VerifyCommand("verify", this));
         pm.registerCommand(this, new IVUpdateCommand("InstantVerifyUpdate", this));
         if (serverConfig.getTeamSpeakCredentials().get("Instant").equals(true)) {
             pm.registerListener(this, new Login(this));
         }
+
+        /*
+         * Database Manager
+         */
+        dbManager = new DBManager(this);
+        dbManager.connect();
 
         /*
          * Updater
@@ -84,12 +92,12 @@ public class InstantVerify extends Plugin {
     @Override
     public void onDisable() {
         super.onDisable();
-        teamSpeak.getQuery().exit();
-        getDiscord().getJda().shutdownNow();
-        System.out.println("InstantVerify >> Did you like it? Yes/No? Drop me a line and let me know what's on your mind! \n\n" +
-                "Discord for Support: https://discord.gg/2aSSGcz\n" +
-                "GitHub: https://github.com/Luuuuuis/InstantVerify\n" +
-                "GitHub Issue: https://github.com/Luuuuuis/InstantVerify/issue\n");
+        if (teamSpeak.getQuery() != null)
+            teamSpeak.getQuery().exit();
+        if (getDiscord().getJda() != null)
+            getDiscord().getJda().shutdownNow();
+        dbManager.close();
+        System.out.println("InstantVerify >> Bye! See you soon.");
     }
 
     public TeamSpeak getTeamSpeak() {
@@ -114,5 +122,9 @@ public class InstantVerify extends Plugin {
 
     public Discord getDiscord() {
         return discord;
+    }
+
+    public DBManager getDbManager() {
+        return dbManager;
     }
 }

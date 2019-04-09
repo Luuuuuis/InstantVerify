@@ -1,12 +1,12 @@
 /*
- * Developed by Luuuuuis on 08.04.19 21:14.
- * Last modified 08.04.19 21:07.
+ * Developed by Luuuuuis on 09.04.19 19:55.
+ * Last modified 09.04.19 19:50.
  * Copyright (c) 2019.
  */
 
-package de.luuuuuis.Bungee.misc;
+package de.luuuuuis.InstantVerify.misc;
 
-import de.luuuuuis.Bungee.InstantVerify;
+import de.luuuuuis.InstantVerify.InstantVerify;
 
 import java.io.BufferedReader;
 import java.io.IOException;

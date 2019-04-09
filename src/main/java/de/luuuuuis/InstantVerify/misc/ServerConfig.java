@@ -1,13 +1,14 @@
 /*
- * Developed by Luuuuuis on 09.04.19 15:00.
- * Last modified 09.04.19 15:00.
+ * Developed by Luuuuuis on 09.04.19 19:55.
+ * Last modified 09.04.19 19:50.
  * Copyright (c) 2019.
  */
 
-package de.luuuuuis.Spigot;
+package de.luuuuuis.InstantVerify.misc;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import de.luuuuuis.InstantVerify.InstantVerify;
 import net.md_5.bungee.api.ChatColor;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
@@ -24,6 +25,8 @@ public class ServerConfig {
 
     private HashMap<String, Object> TeamSpeakCredentials = new HashMap<>();
     private HashMap<String, Object> DiscordCredentials = new HashMap<>();
+    private HashMap<String, Object> SQLiteCredentials = new HashMap<>();
+    private HashMap<String, Object> MySQLCredentials = new HashMap<>();
     private InstantVerify instantVerify;
 
     public ServerConfig(InstantVerify instantVerify) {
@@ -67,6 +70,19 @@ public class ServerConfig {
                     teamspeak.put("Instant", true);
                     jsonObject.put("TeamSpeak", teamspeak);
 
+                    JSONObject SQLite = new JSONObject();
+                    SQLite.put("active", true);
+                    SQLite.put("Database", "verify");
+                    jsonObject.put("SQLite", SQLite);
+
+                    JSONObject MySQL = new JSONObject();
+                    MySQL.put("active", false);
+                    MySQL.put("Host", "localhost");
+                    MySQL.put("Port", 3306);
+                    MySQL.put("Database", "verify");
+                    MySQL.put("User", "root");
+                    MySQL.put("Password", "yourPassword");
+                    jsonObject.put("MySQL", MySQL);
 
                     Gson gson = new GsonBuilder().setPrettyPrinting().create();
 
@@ -96,7 +112,19 @@ public class ServerConfig {
                     DiscordCredentials.put(pair.getKey().toString(), pair.getValue());
                 }
 
-                InstantVerify.setPrefix(ChatColor.translateAlternateColorCodes('&', jsonObject.get("Prefix").toString().replace("§", "&") + "&7 "));
+                Map SQLiteJSON = (Map) jsonObject.get("SQLite");
+                for (Object o : SQLiteJSON.entrySet()) {
+                    Map.Entry pair = (Map.Entry) o;
+                    SQLiteCredentials.put(pair.getKey().toString(), pair.getValue());
+                }
+
+                Map MySQLJSON = (Map) jsonObject.get("MySQL");
+                for (Object o : MySQLJSON.entrySet()) {
+                    Map.Entry pair = (Map.Entry) o;
+                    MySQLCredentials.put(pair.getKey().toString(), pair.getValue());
+                }
+
+                instantVerify.setPrefix(ChatColor.translateAlternateColorCodes('&', jsonObject.get("Prefix").toString().replace("§", "&") + "&7 "));
 
             } catch (IOException | ParseException e) {
                 e.printStackTrace();
@@ -117,5 +145,13 @@ public class ServerConfig {
 
     public HashMap<String, Object> getDiscordCredentials() {
         return DiscordCredentials;
+    }
+
+    public HashMap<String, Object> getSQLiteCredentials() {
+        return SQLiteCredentials;
+    }
+
+    public HashMap<String, Object> getMySQLCredentials() {
+        return MySQLCredentials;
     }
 }

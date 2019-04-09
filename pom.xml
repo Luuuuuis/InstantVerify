@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
-  ~ Developed by Luuuuuis on 09.04.19 15:00.
-  ~ Last modified 09.04.19 14:57.
+  ~ Developed by Luuuuuis on 09.04.19 19:55.
+  ~ Last modified 09.04.19 19:52.
   ~ Copyright (c) 2019.
   -->
 
@@ -12,7 +12,7 @@
 
     <groupId>de.luuuuuis.InstantVerify</groupId>
     <artifactId>InstantVerify</artifactId>
-    <version>1.9.09.042019</version>
+    <version>2.0.09.042019</version>
 
     <repositories>
         <repository>
@@ -23,10 +23,6 @@
             <id>jcenter</id>
             <name>jcenter-bintray</name>
             <url>http://jcenter.bintray.com</url>
-        </repository>
-        <repository>
-            <id>spigot-repo</id>
-            <url>https://hub.spigotmc.org/nexus/content/repositories/snapshots/</url>
         </repository>
     </repositories>
 
@@ -108,13 +104,6 @@
                 </exclusion>
             </exclusions>
         </dependency>
-        <!--Spigot API-->
-        <dependency>
-            <groupId>org.spigotmc</groupId>
-            <artifactId>spigot-api</artifactId>
-            <version>1.8.8-R0.1-SNAPSHOT</version>
-            <scope>provided</scope>
-        </dependency>
         <!-- https://mvnrepository.com/artifact/com.github.theholywaffle/teamspeak3-api -->
         <dependency>
             <groupId>com.github.theholywaffle</groupId>
@@ -125,6 +114,12 @@
             <groupId>org.slf4j</groupId>
             <artifactId>slf4j-simple</artifactId>
             <version>1.7.25</version>
+        </dependency>
+        <!-- https://mvnrepository.com/artifact/org.xerial/sqlite-jdbc -->
+        <dependency>
+            <groupId>org.xerial</groupId>
+            <artifactId>sqlite-jdbc</artifactId>
+            <version>3.27.2.1</version>
         </dependency>
     </dependencies>
 

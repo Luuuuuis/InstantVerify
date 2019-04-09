@@ -1,12 +1,12 @@
 /*
- * Developed by Luuuuuis on 08.04.19 21:14.
- * Last modified 08.04.19 21:14.
+ * Developed by Luuuuuis on 09.04.19 19:55.
+ * Last modified 09.04.19 19:50.
  * Copyright (c) 2019.
  */
 
-package de.luuuuuis.Bungee.Commands;
+package de.luuuuuis.InstantVerify.Commands;
 
-import de.luuuuuis.Bungee.InstantVerify;
+import de.luuuuuis.InstantVerify.InstantVerify;
 import net.md_5.bungee.api.CommandSender;
 import net.md_5.bungee.api.plugin.Command;
 

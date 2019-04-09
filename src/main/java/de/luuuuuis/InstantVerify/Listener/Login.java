@@ -1,16 +1,16 @@
 /*
- * Developed by Luuuuuis on 09.04.19 15:00.
- * Last modified 09.04.19 14:01.
+ * Developed by Luuuuuis on 09.04.19 19:55.
+ * Last modified 09.04.19 19:50.
  * Copyright (c) 2019.
  */
 
-package de.luuuuuis.Bungee.Listener;
+package de.luuuuuis.InstantVerify.Listener;
 
 import com.github.theholywaffle.teamspeak3.TS3ApiAsync;
 import com.github.theholywaffle.teamspeak3.api.ClientProperty;
 import com.github.theholywaffle.teamspeak3.api.wrapper.Client;
-import de.luuuuuis.Bungee.Events.VerifyEvent;
-import de.luuuuuis.Bungee.InstantVerify;
+import de.luuuuuis.InstantVerify.Events.VerifyEvent;
+import de.luuuuuis.InstantVerify.InstantVerify;
 import net.md_5.bungee.api.ProxyServer;
 import net.md_5.bungee.api.event.LoginEvent;
 import net.md_5.bungee.api.plugin.Listener;
@@ -54,6 +54,7 @@ public class Login implements Listener {
                                     .replace("%Name", e.getConnection().getName())
                                     .replace("%UUID", e.getConnection().getUniqueId().toString())
                     ));
+                    instantVerify.getDbManager().getVerifyPlayer().update(e.getConnection().getUniqueId(), client.getUniqueIdentifier(), null, null);
                 }
             }
         }).onFailure(ex -> System.err.println("InstantVerify >> Could not get players! \n" + ex.getMessage()));

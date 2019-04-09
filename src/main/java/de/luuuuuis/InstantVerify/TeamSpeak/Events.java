@@ -1,17 +1,18 @@
 /*
- * Developed by Luuuuuis on 02.04.19 19:39.
- * Last modified 02.04.19 19:39.
+ * Developed by Luuuuuis on 09.04.19 19:55.
+ * Last modified 09.04.19 19:50.
  * Copyright (c) 2019.
  */
 
-package de.luuuuuis.Spigot.TeamSpeak;
+package de.luuuuuis.InstantVerify.TeamSpeak;
 
 import com.github.theholywaffle.teamspeak3.TS3ApiAsync;
 import com.github.theholywaffle.teamspeak3.api.ClientProperty;
 import com.github.theholywaffle.teamspeak3.api.event.*;
-import de.luuuuuis.Spigot.InstantVerify;
-import org.bukkit.Bukkit;
-import org.bukkit.entity.Player;
+import de.luuuuuis.InstantVerify.Events.VerifyEvent;
+import de.luuuuuis.InstantVerify.InstantVerify;
+import net.md_5.bungee.api.ProxyServer;
+import net.md_5.bungee.api.connection.ProxiedPlayer;
 
 import java.util.*;
 import java.util.concurrent.Executor;
@@ -19,7 +20,9 @@ import java.util.concurrent.Executors;
 
 class Events {
 
-    Events(TS3ApiAsync apiAsync, Integer serverGroup) {
+    Events(InstantVerify instantVerify) {
+
+        TS3ApiAsync apiAsync = instantVerify.getTeamSpeak().getApi();
 
         apiAsync.registerAllEvents();
         apiAsync.addTS3Listeners(new TS3Listener() {
@@ -34,20 +37,26 @@ class Events {
 
                     List<Integer> groups = new ArrayList<>();
                     Arrays.stream(clientInfo.getServerGroups()).forEach(groups::add);
-                    if (!groups.contains(serverGroup)) {
+                    if (!groups.contains(instantVerify.getTeamSpeak().getServerGroup())) {
                         Executor executor = Executors.newSingleThreadExecutor();
 
-                        Collection<Player> playerList = (Collection<Player>) Bukkit.getOnlinePlayers();
+                        Collection<ProxiedPlayer> playerList = ProxyServer.getInstance().getPlayers();
 
                         executor.execute(() -> {
-                            Player player = playerList.stream().filter(players -> players.getAddress().getHostString().equals(clientInfo.getIp())).findAny().orElse(null);
+                            ProxiedPlayer player = playerList.stream().filter(players -> players.getAddress().getHostString().equals(clientInfo.getIp())).findFirst().orElse(null);
                             if (player == null) return;
-                            apiAsync.addClientToServerGroup(serverGroup, clientInfo.getDatabaseId());
-                            apiAsync.editDatabaseClient(clientInfo.getDatabaseId(), Collections.singletonMap(ClientProperty.CLIENT_DESCRIPTION,
-                                    InstantVerify.serverConfig.getTeamSpeakCredentials().get("Description").toString()
-                                            .replace("%Name", player.getName())
-                                            .replace("%UUID", player.getUniqueId().toString())
-                            ));
+
+                            VerifyEvent verifyEvent = new VerifyEvent();
+                            ProxyServer.getInstance().getPluginManager().callEvent(verifyEvent);
+                            if (!verifyEvent.isCancelled()) {
+                                apiAsync.addClientToServerGroup(instantVerify.getTeamSpeak().getServerGroup(), clientInfo.getDatabaseId());
+                                apiAsync.editDatabaseClient(clientInfo.getDatabaseId(), Collections.singletonMap(ClientProperty.CLIENT_DESCRIPTION,
+                                        instantVerify.getServerConfig().getTeamSpeakCredentials().get("Description").toString()
+                                                .replace("%Name", player.getName())
+                                                .replace("%UUID", player.getUniqueId().toString())
+                                ));
+                                instantVerify.getDbManager().getVerifyPlayer().update(player.getUniqueId(), clientInfo.getUniqueIdentifier(), null, null);
+                            }
 
                         });
 

@@ -1,6 +1,6 @@
 name: InstantVerify
-version: 1.9.09.042019
-main: de.luuuuuis.Bungee.InstantVerify
+version: 2.0.09.042019
+main: de.luuuuuis.InstantVerify.InstantVerify
 author: Luuuuuis
 website: https://github.com/Luuuuuis/InstantVerify
 prefix: InstantVerify
