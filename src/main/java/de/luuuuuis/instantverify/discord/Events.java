@@ -1,13 +1,13 @@
 /*
- * Developed by Luuuuuis on 09.04.19 19:55.
- * Last modified 09.04.19 19:50.
+ * Developed by Luuuuuis on 23.04.19 16:47.
+ * Last modified 23.04.19 16:47.
  * Copyright (c) 2019.
  */
 
-package de.luuuuuis.InstantVerify.Discord;
+package de.luuuuuis.instantverify.discord;
 
-import de.luuuuuis.InstantVerify.Events.VerifyEvent;
-import de.luuuuuis.InstantVerify.InstantVerify;
+import de.luuuuuis.instantverify.InstantVerify;
+import de.luuuuuis.instantverify.events.VerifyEvent;
 import net.dv8tion.jda.core.events.message.priv.PrivateMessageReceivedEvent;
 import net.dv8tion.jda.core.hooks.ListenerAdapter;
 import net.md_5.bungee.api.ProxyServer;
@@ -40,7 +40,7 @@ public class Events extends ListenerAdapter {
             }
         } else {
             e.getAuthor().openPrivateChannel().queue(channel -> {
-                e.getChannel().sendMessage("Hast du schon mal versucht /verify <Discord ID> auf dem Commands Server auszuführen? Deine ID ist " + e.getAuthor().getId() + "\n" +
+                e.getChannel().sendMessage("Hast du schon mal versucht /verify <discord ID> auf dem commands Server auszuführen? Deine ID ist " + e.getAuthor().getId() + "\n" +
                         "Falls du sonst noch Probleme hast, kannst du gerne ein Teammitglied anschreiben.")
                         .queue();
             });

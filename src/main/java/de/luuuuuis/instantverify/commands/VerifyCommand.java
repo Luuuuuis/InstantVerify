@@ -1,17 +1,17 @@
 /*
- * Developed by Luuuuuis on 09.04.19 19:55.
- * Last modified 09.04.19 19:50.
+ * Developed by Luuuuuis on 23.04.19 16:47.
+ * Last modified 23.04.19 16:47.
  * Copyright (c) 2019.
  */
 
-package de.luuuuuis.InstantVerify.Commands;
+package de.luuuuuis.instantverify.commands;
 
 import com.github.theholywaffle.teamspeak3.TS3ApiAsync;
 import com.github.theholywaffle.teamspeak3.api.ClientProperty;
 import com.github.theholywaffle.teamspeak3.api.wrapper.Client;
-import de.luuuuuis.InstantVerify.Database.PlayerInfo;
-import de.luuuuuis.InstantVerify.Events.VerifyEvent;
-import de.luuuuuis.InstantVerify.InstantVerify;
+import de.luuuuuis.instantverify.InstantVerify;
+import de.luuuuuis.instantverify.database.PlayerInfo;
+import de.luuuuuis.instantverify.events.VerifyEvent;
 import net.dv8tion.jda.core.entities.User;
 import net.md_5.bungee.api.CommandSender;
 import net.md_5.bungee.api.ProxyServer;
@@ -25,7 +25,7 @@ public class VerifyCommand extends Command {
     private InstantVerify instantVerify;
 
     public VerifyCommand(String name, InstantVerify instantVerify) {
-        super(name, "", "InstantVerify", "IV");
+        super(name, "", "instantverify", "IV");
         this.instantVerify = instantVerify;
     }
 
@@ -33,7 +33,7 @@ public class VerifyCommand extends Command {
     @Override
     public void execute(CommandSender sender, String[] args) {
         if (!(sender instanceof ProxiedPlayer)) {
-            sender.sendMessage("InstantVerify >> Command only usable as player!");
+            sender.sendMessage("instantverify >> Command only usable as player!");
             return;
         }
 
@@ -66,15 +66,15 @@ public class VerifyCommand extends Command {
                             }
                         }
                     }
-                }).onFailure(ex -> System.err.println("InstantVerify >> Could not get players! \n" + ex.getMessage()));
+                }).onFailure(ex -> System.err.println("instantverify >> Could not get players! \n" + ex.getMessage()));
             }
 
             StringJoiner stringJoiner = new StringJoiner("|", "<", ">");
             if (apiAsync != null) {
-                stringJoiner.add("TeamSpeak Name|TeamSpeak Unique ID");
+                stringJoiner.add("teamspeak Name|teamspeak Unique ID");
             }
             if (instantVerify.getDiscord().getJda() != null) {
-                stringJoiner.add("Discord ID");
+                stringJoiner.add("discord ID");
             }
             stringJoiner.add("Status");
             p.sendMessage(instantVerify.getPrefix() + "/verify " + stringJoiner.toString());
@@ -93,12 +93,12 @@ public class VerifyCommand extends Command {
                 p.sendMessage("");
             } else if (args[0].length() == 18) {
                 if (instantVerify.getDiscord().getJda() == null) {
-                    p.sendMessage(instantVerify.getPrefix() + "§4Wir konnten dich leider nicht verifizieren, da keine Verbindung zu Discord besteht! :(");
+                    p.sendMessage(instantVerify.getPrefix() + "§4Wir konnten dich leider nicht verifizieren, da keine Verbindung zu discord besteht! :(");
                     return;
                 }
                 User user = instantVerify.getDiscord().getJda().getUserById(args[0]);
                 if (user == null) {
-                    p.sendMessage(instantVerify.getPrefix() + "Bitte betrete unseren Discord und überprüfe deine Discord ID.");
+                    p.sendMessage(instantVerify.getPrefix() + "Bitte betrete unseren discord und überprüfe deine discord ID.");
                     return;
                 }
 
@@ -111,16 +111,16 @@ public class VerifyCommand extends Command {
                 instantVerify.getDiscord().getVerifying().put(user.getId(), p);
                 user.openPrivateChannel().queue(channel -> channel.sendMessage("Hi " + user.getAsMention() + ",\nBitte sende mir dein Minecraft Namen, damit wir dich überprüfen können." +
                         "\nFalls dies nicht dein Account ist, schließe diesen Chat einfach.").queue());
-                p.sendMessage(instantVerify.getPrefix() + "Der Discord Bot hat dir eine Nachricht gesendet.");
+                p.sendMessage(instantVerify.getPrefix() + "Der discord Bot hat dir eine Nachricht gesendet.");
             } else if (args[0].endsWith("=") && args[0].length() == 28) {
                 if (apiAsync == null) {
-                    p.sendMessage(instantVerify.getPrefix() + "§4Wir konnten dich leider nicht verifizieren, da keine Verbindung zu TeamSpeak besteht! :(");
+                    p.sendMessage(instantVerify.getPrefix() + "§4Wir konnten dich leider nicht verifizieren, da keine Verbindung zu teamspeak besteht! :(");
                     return;
                 }
 
                 apiAsync.getClientByUId(args[0]).onSuccess(clientInfo -> {
                     if (clientInfo == null) {
-                        p.sendMessage(instantVerify.getPrefix() + "Bitte betrete unseren TeamSpeak und überprüfe dein Namen.");
+                        p.sendMessage(instantVerify.getPrefix() + "Bitte betrete unseren teamspeak und überprüfe dein Namen.");
                         return;
                     }
                     List<Integer> groups = new ArrayList<>();
@@ -141,21 +141,21 @@ public class VerifyCommand extends Command {
                                 instantVerify.getDbManager().getVerifyPlayer().update(p.getUniqueId(), clientInfo.getUniqueIdentifier(), null, null);
                             }
                         } else {
-                            p.sendMessage(instantVerify.getPrefix() + "§4Wir konnten dich leider nicht verifizieren, da deine IP auf dem Commands Server eine andere als auf dem TeamSpeak ist!");
+                            p.sendMessage(instantVerify.getPrefix() + "§4Wir konnten dich leider nicht verifizieren, da deine IP auf dem commands Server eine andere als auf dem teamspeak ist!");
                         }
                     } else {
                         p.sendMessage(instantVerify.getPrefix() + "§cDu hast dich bereits verifiziert.");
                     }
-                }).onFailure(ex -> p.sendMessage(instantVerify.getPrefix() + "Bitte betrete unseren TeamSpeak und überprüfe dein Namen."));
+                }).onFailure(ex -> p.sendMessage(instantVerify.getPrefix() + "Bitte betrete unseren teamspeak und überprüfe dein Namen."));
             } else {
                 if (apiAsync == null) {
-                    p.sendMessage(instantVerify.getPrefix() + "§4Wir konnten dich leider nicht verifizieren, da keine Verbindung zu TeamSpeak besteht! :(");
+                    p.sendMessage(instantVerify.getPrefix() + "§4Wir konnten dich leider nicht verifizieren, da keine Verbindung zu teamspeak besteht! :(");
                     return;
                 }
 
                 apiAsync.getClientByNameExact(args[0], false).onSuccess(client -> {
                     if (client == null) {
-                        p.sendMessage(instantVerify.getPrefix() + "Bitte betrete unseren TeamSpeak und überprüfe dein Namen.");
+                        p.sendMessage(instantVerify.getPrefix() + "Bitte betrete unseren teamspeak und überprüfe dein Namen.");
                         return;
                     }
                     List<Integer> groups = new ArrayList<>();
@@ -176,7 +176,7 @@ public class VerifyCommand extends Command {
                                 instantVerify.getDbManager().getVerifyPlayer().update(p.getUniqueId(), client.getUniqueIdentifier(), null, null);
                             }
                         } else {
-                            p.sendMessage(instantVerify.getPrefix() + "§4Wir konnten dich leider nicht verifizieren, da deine IP auf dem Commands Server eine andere als auf dem TeamSpeak ist!");
+                            p.sendMessage(instantVerify.getPrefix() + "§4Wir konnten dich leider nicht verifizieren, da deine IP auf dem commands Server eine andere als auf dem teamspeak ist!");
                         }
                     } else {
                         p.sendMessage(instantVerify.getPrefix() + "§cDu hast dich bereits verifiziert.");

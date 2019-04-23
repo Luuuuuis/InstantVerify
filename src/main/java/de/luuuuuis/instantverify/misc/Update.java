@@ -1,12 +1,12 @@
 /*
- * Developed by Luuuuuis on 09.04.19 19:55.
- * Last modified 09.04.19 19:50.
+ * Developed by Luuuuuis on 23.04.19 16:47.
+ * Last modified 23.04.19 16:46.
  * Copyright (c) 2019.
  */
 
-package de.luuuuuis.InstantVerify.misc;
+package de.luuuuuis.instantverify.misc;
 
-import de.luuuuuis.InstantVerify.InstantVerify;
+import de.luuuuuis.instantverify.InstantVerify;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -71,8 +71,8 @@ public class Update {
                             ex.printStackTrace();
                         }
 
-                        System.out.println("InstantVerify >> A new update is available(" + versionCode[0] + ") please restart your server soon.");
-                        System.out.println("InstantVerify >> Changelog can be viewed at GitHub: https://github.com/Luuuuuis/InstantVerify/releases");
+                        System.out.println("instantverify >> A new update is available(" + versionCode[0] + ") please restart your server soon.");
+                        System.out.println("instantverify >> Changelog can be viewed at GitHub: https://github.com/Luuuuuis/InstantVerify/releases");
 
                         setVersion(instantVerify.getDescription().getVersion() + " (outdated)");
                     });

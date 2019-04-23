@@ -1,12 +1,12 @@
 /*
- * Developed by Luuuuuis on 09.04.19 19:55.
- * Last modified 09.04.19 19:50.
+ * Developed by Luuuuuis on 23.04.19 16:47.
+ * Last modified 23.04.19 16:46.
  * Copyright (c) 2019.
  */
 
-package de.luuuuuis.InstantVerify.Database.SQLite;
+package de.luuuuuis.instantverify.database.sqlite;
 
-import de.luuuuuis.InstantVerify.InstantVerify;
+import de.luuuuuis.instantverify.InstantVerify;
 
 import java.sql.Connection;
 import java.sql.DatabaseMetaData;
@@ -23,14 +23,14 @@ public class SQLite {
 
     public void init() {
 
-        String url = "jdbc:sqlite:" + instantVerify.getDataFolder().getAbsolutePath() + "/" + instantVerify.getServerConfig().getSQLiteCredentials().get("Database").toString() + ".sqlite";
+        String url = "jdbc:sqlite:" + instantVerify.getDataFolder().getAbsolutePath() + "/" + instantVerify.getServerConfig().getSQLiteCredentials().get("database").toString() + ".sqlite";
         try {
             Class.forName("org.sqlite.JDBC");
             Connection connection = DriverManager.getConnection(url);
 
             if (connection != null) {
                 DatabaseMetaData metaData = connection.getMetaData();
-                System.out.println("InstantVerify SQLite >> Connected to " + metaData.getDatabaseProductName());
+                System.out.println("instantverify sqlite >> Connected to " + metaData.getDatabaseProductName());
 
                 instantVerify.getDbManager().setConnection(connection);
             }

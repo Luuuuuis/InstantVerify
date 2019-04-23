@@ -1,12 +1,12 @@
 /*
- * Developed by Luuuuuis on 09.04.19 19:55.
- * Last modified 09.04.19 19:50.
+ * Developed by Luuuuuis on 23.04.19 16:47.
+ * Last modified 23.04.19 16:46.
  * Copyright (c) 2019.
  */
 
-package de.luuuuuis.InstantVerify.Database;
+package de.luuuuuis.instantverify.database;
 
-import de.luuuuuis.InstantVerify.InstantVerify;
+import de.luuuuuis.instantverify.InstantVerify;
 
 import java.sql.PreparedStatement;
 import java.sql.SQLException;

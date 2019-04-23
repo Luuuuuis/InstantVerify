@@ -1,22 +1,21 @@
 /*
- * Developed by Luuuuuis on 09.04.19 19:55.
- * Last modified 09.04.19 19:50.
+ * Developed by Luuuuuis on 23.04.19 16:47.
+ * Last modified 23.04.19 16:46.
  * Copyright (c) 2019.
  */
 
-package de.luuuuuis.InstantVerify.Database;
+package de.luuuuuis.instantverify.database;
 
-import de.luuuuuis.InstantVerify.InstantVerify;
+import de.luuuuuis.instantverify.InstantVerify;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
 public class PlayerInfo {
 
-    private String uuid, tsid, discordid, email;
+    private String tsid, discordid, email;
 
     private PlayerInfo(ResultSet rs) throws SQLException {
-        uuid = rs.getString("UUID");
         tsid = rs.getString("TSID");
         discordid = rs.getString("DISCORDID");
         email = rs.getString("EMAIL");
@@ -34,10 +33,6 @@ public class PlayerInfo {
         return null;
     }
 
-
-    public String getUuid() {
-        return uuid;
-    }
 
     String getTsid() {
         return tsid;

@@ -1,10 +1,10 @@
 /*
- * Developed by Luuuuuis on 09.04.19 19:55.
- * Last modified 09.04.19 19:50.
+ * Developed by Luuuuuis on 23.04.19 16:47.
+ * Last modified 23.04.19 16:46.
  * Copyright (c) 2019.
  */
 
-package de.luuuuuis.InstantVerify.Events;
+package de.luuuuuis.instantverify.events;
 
 import net.md_5.bungee.api.plugin.Cancellable;
 import net.md_5.bungee.api.plugin.Event;

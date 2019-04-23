@@ -1,15 +1,15 @@
 /*
- * Developed by Luuuuuis on 09.04.19 19:55.
- * Last modified 09.04.19 19:50.
+ * Developed by Luuuuuis on 23.04.19 16:47.
+ * Last modified 23.04.19 16:46.
  * Copyright (c) 2019.
  */
 
-package de.luuuuuis.InstantVerify.TeamSpeak;
+package de.luuuuuis.instantverify.teamspeak;
 
 import com.github.theholywaffle.teamspeak3.TS3ApiAsync;
 import com.github.theholywaffle.teamspeak3.TS3Config;
 import com.github.theholywaffle.teamspeak3.TS3Query;
-import de.luuuuuis.InstantVerify.InstantVerify;
+import de.luuuuuis.instantverify.InstantVerify;
 
 public class TeamSpeak {
 
@@ -32,7 +32,7 @@ public class TeamSpeak {
                 api.selectVirtualServerById(Integer.parseInt(instantVerify.getServerConfig().getTeamSpeakCredentials().get("VirtualServerId").toString()));
                 api.setNickname(instantVerify.getServerConfig().getTeamSpeakCredentials().get("Nickname").toString());
 
-                System.out.println("InstantVerify >> Successfully connected to TeamSpeak");
+                System.out.println("instantverify >> Successfully connected to teamspeak");
 
                 if (instantVerify.getServerConfig().getTeamSpeakCredentials().get("Instant").equals(true)) {
                     assert api != null;
@@ -41,7 +41,7 @@ public class TeamSpeak {
             });
             thread.start();
         } catch (Exception ex) {
-            System.err.println("InstantVerify >> Cannot connect to the TeamSpeak server! Check your config to make sure you are using the correct credentials.");
+            System.err.println("instantverify >> Cannot connect to the teamspeak server! Check your config to make sure you are using the correct credentials.");
             query.exit();
             api.logout();
             api = null;

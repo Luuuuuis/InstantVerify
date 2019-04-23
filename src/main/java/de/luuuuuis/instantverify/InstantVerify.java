@@ -1,19 +1,19 @@
 /*
- * Developed by Luuuuuis on 09.04.19 19:55.
- * Last modified 09.04.19 19:50.
+ * Developed by Luuuuuis on 23.04.19 16:47.
+ * Last modified 23.04.19 16:47.
  * Copyright (c) 2019.
  */
 
-package de.luuuuuis.InstantVerify;
+package de.luuuuuis.instantverify;
 
-import de.luuuuuis.InstantVerify.Commands.IVUpdateCommand;
-import de.luuuuuis.InstantVerify.Commands.VerifyCommand;
-import de.luuuuuis.InstantVerify.Database.DBManager;
-import de.luuuuuis.InstantVerify.Discord.Discord;
-import de.luuuuuis.InstantVerify.Listener.Login;
-import de.luuuuuis.InstantVerify.TeamSpeak.TeamSpeak;
-import de.luuuuuis.InstantVerify.misc.ServerConfig;
-import de.luuuuuis.InstantVerify.misc.Update;
+import de.luuuuuis.instantverify.commands.IVUpdateCommand;
+import de.luuuuuis.instantverify.commands.VerifyCommand;
+import de.luuuuuis.instantverify.database.DBManager;
+import de.luuuuuis.instantverify.discord.Discord;
+import de.luuuuuis.instantverify.listener.Login;
+import de.luuuuuis.instantverify.misc.ServerConfig;
+import de.luuuuuis.instantverify.misc.Update;
+import de.luuuuuis.instantverify.teamspeak.TeamSpeak;
 import net.md_5.bungee.api.plugin.Plugin;
 import net.md_5.bungee.api.plugin.PluginManager;
 
@@ -50,14 +50,14 @@ public class InstantVerify extends Plugin {
         serverConfig = new ServerConfig(this);
 
         /*
-         * Starts the TeamSpeak Bot
+         * Starts the teamspeak Bot
          */
         if (!serverConfig.getTeamSpeakCredentials().get("password").toString().equals("yourPassword")) {
             teamSpeak = new TeamSpeak(this);
         }
 
         /*
-         * Starts the Discord Bot
+         * Starts the discord Bot
          */
         String botToken = serverConfig.getDiscordCredentials().get("Token").toString();
         discord = new Discord(this);
@@ -67,7 +67,7 @@ public class InstantVerify extends Plugin {
         }
 
         /*
-         * Commands Commands
+         * commands commands
          */
         PluginManager pm = getProxy().getPluginManager();
         pm.registerCommand(this, new VerifyCommand("verify", this));
@@ -77,7 +77,7 @@ public class InstantVerify extends Plugin {
         }
 
         /*
-         * Database Manager
+         * database Manager
          */
         dbManager = new DBManager(this);
         dbManager.connect();
@@ -95,9 +95,9 @@ public class InstantVerify extends Plugin {
         if (teamSpeak.getQuery() != null)
             teamSpeak.getQuery().exit();
         if (getDiscord().getJda() != null)
-            getDiscord().getJda().shutdownNow();
+            getDiscord().getJda().shutdown();
         dbManager.close();
-        System.out.println("InstantVerify >> Bye! See you soon.");
+        System.out.println("instantverify >> Bye! See you soon.");
     }
 
     public TeamSpeak getTeamSpeak() {

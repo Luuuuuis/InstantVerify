@@ -1,14 +1,14 @@
 /*
- * Developed by Luuuuuis on 09.04.19 19:55.
- * Last modified 09.04.19 19:50.
+ * Developed by Luuuuuis on 23.04.19 16:47.
+ * Last modified 23.04.19 16:46.
  * Copyright (c) 2019.
  */
 
-package de.luuuuuis.InstantVerify.misc;
+package de.luuuuuis.instantverify.misc;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import de.luuuuuis.InstantVerify.InstantVerify;
+import de.luuuuuis.instantverify.InstantVerify;
 import net.md_5.bungee.api.ChatColor;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
@@ -57,32 +57,32 @@ public class ServerConfig {
                     JSONObject discord = new JSONObject();
                     discord.put("Token", "BOT-TOKEN");
                     discord.put("ServerGroup", "user");
-                    jsonObject.put("Discord", discord);
+                    jsonObject.put("discord", discord);
 
                     JSONObject teamspeak = new JSONObject();
                     teamspeak.put("Host", "localhost");
                     teamspeak.put("username", "serveradmin");
                     teamspeak.put("password", "yourPassword");
                     teamspeak.put("VirtualServerID", 1);
-                    teamspeak.put("Nickname", "InstantVerify TS Bot");
+                    teamspeak.put("Nickname", "instantverify TS Bot");
                     teamspeak.put("ServerGroup", 7);
                     teamspeak.put("Description", "Minecraft Name: %Name | UUID: %UUID");
                     teamspeak.put("Instant", true);
-                    jsonObject.put("TeamSpeak", teamspeak);
+                    jsonObject.put("teamspeak", teamspeak);
 
                     JSONObject SQLite = new JSONObject();
                     SQLite.put("active", true);
-                    SQLite.put("Database", "verify");
-                    jsonObject.put("SQLite", SQLite);
+                    SQLite.put("database", "verify");
+                    jsonObject.put("sqlite", SQLite);
 
                     JSONObject MySQL = new JSONObject();
                     MySQL.put("active", false);
                     MySQL.put("Host", "localhost");
                     MySQL.put("Port", 3306);
-                    MySQL.put("Database", "verify");
+                    MySQL.put("database", "verify");
                     MySQL.put("User", "root");
                     MySQL.put("Password", "yourPassword");
-                    jsonObject.put("MySQL", MySQL);
+                    jsonObject.put("mysql", MySQL);
 
                     Gson gson = new GsonBuilder().setPrettyPrinting().create();
 
@@ -100,25 +100,25 @@ public class ServerConfig {
                 Object object = new JSONParser().parse(new FileReader(instantVerify.getDataFolder().getPath() + "/config.json"));
                 JSONObject jsonObject = (JSONObject) object;
 
-                Map TeamSpeakJSON = (Map) jsonObject.get("TeamSpeak");
+                Map TeamSpeakJSON = (Map) jsonObject.get("teamspeak");
                 for (Object o : TeamSpeakJSON.entrySet()) {
                     Map.Entry pair = (Map.Entry) o;
                     TeamSpeakCredentials.put(pair.getKey().toString(), pair.getValue());
                 }
 
-                Map DiscordJSON = (Map) jsonObject.get("Discord");
+                Map DiscordJSON = (Map) jsonObject.get("discord");
                 for (Object o : DiscordJSON.entrySet()) {
                     Map.Entry pair = (Map.Entry) o;
                     DiscordCredentials.put(pair.getKey().toString(), pair.getValue());
                 }
 
-                Map SQLiteJSON = (Map) jsonObject.get("SQLite");
+                Map SQLiteJSON = (Map) jsonObject.get("sqlite");
                 for (Object o : SQLiteJSON.entrySet()) {
                     Map.Entry pair = (Map.Entry) o;
                     SQLiteCredentials.put(pair.getKey().toString(), pair.getValue());
                 }
 
-                Map MySQLJSON = (Map) jsonObject.get("MySQL");
+                Map MySQLJSON = (Map) jsonObject.get("mysql");
                 for (Object o : MySQLJSON.entrySet()) {
                     Map.Entry pair = (Map.Entry) o;
                     MySQLCredentials.put(pair.getKey().toString(), pair.getValue());

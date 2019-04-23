@@ -1,14 +1,14 @@
 /*
- * Developed by Luuuuuis on 09.04.19 19:55.
- * Last modified 09.04.19 19:50.
+ * Developed by Luuuuuis on 23.04.19 16:47.
+ * Last modified 23.04.19 16:47.
  * Copyright (c) 2019.
  */
 
-package de.luuuuuis.InstantVerify.Database;
+package de.luuuuuis.instantverify.database;
 
-import de.luuuuuis.InstantVerify.Database.MySQL.MySQL;
-import de.luuuuuis.InstantVerify.Database.SQLite.SQLite;
-import de.luuuuuis.InstantVerify.InstantVerify;
+import de.luuuuuis.instantverify.InstantVerify;
+import de.luuuuuis.instantverify.database.mysql.MySQL;
+import de.luuuuuis.instantverify.database.sqlite.SQLite;
 
 import java.sql.Connection;
 import java.sql.ResultSet;
@@ -43,7 +43,7 @@ public class DBManager {
         // Create Tables
         try {
             connection.createStatement().executeUpdate("CREATE TABLE IF NOT EXISTS verify(UUID VARCHAR(36), TSID VARCHAR(28), DISCORDID VARCHAR(18), EMAIL VARCHAR(100))");
-            System.out.println("InstantVerify SQL >> Successfully created all tables");
+            System.out.println("instantverify SQL >> Successfully created all tables");
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -56,7 +56,7 @@ public class DBManager {
         if (!isConnected()) return;
         try {
             connection.close();
-            System.out.println("InstantVerify SQL >> Successfully closed the connection");
+            System.out.println("instantverify SQL >> Successfully closed the connection");
         } catch (SQLException e) {
             e.printStackTrace();
         }

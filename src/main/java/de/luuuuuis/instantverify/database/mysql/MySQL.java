@@ -1,12 +1,12 @@
 /*
- * Developed by Luuuuuis on 09.04.19 19:55.
- * Last modified 09.04.19 19:55.
+ * Developed by Luuuuuis on 23.04.19 16:47.
+ * Last modified 23.04.19 16:46.
  * Copyright (c) 2019.
  */
 
-package de.luuuuuis.InstantVerify.Database.MySQL;
+package de.luuuuuis.instantverify.database.mysql;
 
-import de.luuuuuis.InstantVerify.InstantVerify;
+import de.luuuuuis.instantverify.InstantVerify;
 
 import java.sql.Connection;
 import java.sql.DatabaseMetaData;
@@ -27,14 +27,14 @@ public class MySQL {
         HashMap<String, Object> getMySQLCredentials = instantVerify.getServerConfig().getMySQLCredentials();
 
         String url = "jdbc:mysql://" + getMySQLCredentials.get("Host").toString() + ":" + getMySQLCredentials.get("Port").toString() + "/"
-                + getMySQLCredentials.get("Database").toString() + "?autoReconnect=true&useUnicode=yes";
+                + getMySQLCredentials.get("database").toString() + "?autoReconnect=true&useUnicode=yes";
         try {
 
             Connection connection = DriverManager.getConnection(url, getMySQLCredentials.get("User").toString(), getMySQLCredentials.get("Password").toString());
 
             if (connection != null) {
                 DatabaseMetaData metaData = connection.getMetaData();
-                System.out.println("InstantVerify MySQL >> Connected to " + metaData.getDatabaseProductName());
+                System.out.println("instantverify mysql >> Connected to " + metaData.getDatabaseProductName());
 
                 instantVerify.getDbManager().setConnection(connection);
             }
