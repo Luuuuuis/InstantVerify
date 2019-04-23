@@ -1,6 +1,6 @@
 /*
- * Developed by Luuuuuis on 23.04.19 16:47.
- * Last modified 23.04.19 16:46.
+ * Developed by Luuuuuis on 23.04.19 19:42.
+ * Last modified 23.04.19 19:29.
  * Copyright (c) 2019.
  */
 
@@ -29,7 +29,7 @@ public class TeamSpeak {
                 config.setHost(instantVerify.getServerConfig().getTeamSpeakCredentials().get("Host").toString());
                 query.connect();
                 api.login(instantVerify.getServerConfig().getTeamSpeakCredentials().get("username").toString(), instantVerify.getServerConfig().getTeamSpeakCredentials().get("password").toString());
-                api.selectVirtualServerById(Integer.parseInt(instantVerify.getServerConfig().getTeamSpeakCredentials().get("VirtualServerId").toString()));
+                api.selectVirtualServerById(Integer.parseInt(instantVerify.getServerConfig().getTeamSpeakCredentials().get("VirtualServerID").toString()));
                 api.setNickname(instantVerify.getServerConfig().getTeamSpeakCredentials().get("Nickname").toString());
 
                 System.out.println("instantverify >> Successfully connected to teamspeak");

@@ -1,6 +1,6 @@
 /*
- * Developed by Luuuuuis on 23.04.19 16:47.
- * Last modified 23.04.19 16:47.
+ * Developed by Luuuuuis on 23.04.19 19:42.
+ * Last modified 23.04.19 17:04.
  * Copyright (c) 2019.
  */
 
@@ -45,7 +45,7 @@ public class InstantVerify extends Plugin {
 
 
         /*
-         * ServerConfig
+         * Config
          */
         serverConfig = new ServerConfig(this);
 
