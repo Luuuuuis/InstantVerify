@@ -1,6 +1,6 @@
 /*
- * Developed by Luuuuuis on 23.04.19 16:47.
- * Last modified 23.04.19 16:47.
+ * Developed by Luuuuuis on 04.05.19 23:14.
+ * Last modified 04.05.19 23:08.
  * Copyright (c) 2019.
  */
 
@@ -11,10 +11,8 @@ import com.github.theholywaffle.teamspeak3.api.ClientProperty;
 import com.github.theholywaffle.teamspeak3.api.wrapper.Client;
 import de.luuuuuis.instantverify.InstantVerify;
 import de.luuuuuis.instantverify.database.PlayerInfo;
-import de.luuuuuis.instantverify.events.VerifyEvent;
 import net.dv8tion.jda.core.entities.User;
 import net.md_5.bungee.api.CommandSender;
-import net.md_5.bungee.api.ProxyServer;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
 import net.md_5.bungee.api.plugin.Command;
 
@@ -52,18 +50,14 @@ public class VerifyCommand extends Command {
                         Arrays.stream(client.getServerGroups()).forEach(groups::add);
 
                         if (!groups.contains(instantVerify.getTeamSpeak().getServerGroup())) {
-                            VerifyEvent verifyEvent = new VerifyEvent();
-                            ProxyServer.getInstance().getPluginManager().callEvent(verifyEvent);
-                            if (!verifyEvent.isCancelled()) {
-                                apiAsync.addClientToServerGroup(instantVerify.getTeamSpeak().getServerGroup(), client.getDatabaseId());
-                                apiAsync.editDatabaseClient(client.getDatabaseId(), Collections.singletonMap(ClientProperty.CLIENT_DESCRIPTION,
-                                        instantVerify.getServerConfig().getTeamSpeakCredentials().get("Description").toString()
-                                                .replace("%Name", p.getName())
-                                                .replace("%UUID", p.getUniqueId().toString())
-                                ));
-                                p.sendMessage(instantVerify.getPrefix() + "§aDu hast dich erfolgreich verifiziert!");
-                                instantVerify.getDbManager().getVerifyPlayer().update(p.getUniqueId(), client.getUniqueIdentifier(), null, null);
-                            }
+                            apiAsync.addClientToServerGroup(instantVerify.getTeamSpeak().getServerGroup(), client.getDatabaseId());
+                            apiAsync.editDatabaseClient(client.getDatabaseId(), Collections.singletonMap(ClientProperty.CLIENT_DESCRIPTION,
+                                    instantVerify.getServerConfig().getTeamSpeakCredentials().get("Description").toString()
+                                            .replace("%Name", p.getName())
+                                            .replace("%UUID", p.getUniqueId().toString())
+                            ));
+                            p.sendMessage(instantVerify.getPrefix() + instantVerify.getLangConfig().getMessages().get("verify.success"));
+                            instantVerify.getDbManager().getVerifyPlayer().update(p.getUniqueId(), client.getUniqueIdentifier(), null, null);
                         }
                     }
                 }).onFailure(ex -> System.err.println("instantverify >> Could not get players! \n" + ex.getMessage()));
@@ -71,10 +65,10 @@ public class VerifyCommand extends Command {
 
             StringJoiner stringJoiner = new StringJoiner("|", "<", ">");
             if (apiAsync != null) {
-                stringJoiner.add("teamspeak Name|teamspeak Unique ID");
+                stringJoiner.add("Teamspeak Name|Teamspeak Unique ID");
             }
             if (instantVerify.getDiscord().getJda() != null) {
-                stringJoiner.add("discord ID");
+                stringJoiner.add("Discord ID");
             }
             stringJoiner.add("Status");
             p.sendMessage(instantVerify.getPrefix() + "/verify " + stringJoiner.toString());
@@ -86,41 +80,39 @@ public class VerifyCommand extends Command {
                 p.sendMessage("§7Discord: " + (instantVerify.getDiscord().getJda() == null ? "§4Offline" : "§aOnline"));
 
                 p.sendMessage("");
-                p.sendMessage("§9§oAutor: Luuuuuis");
+                p.sendMessage("§9§oAuthor: Luuuuuis");
                 p.sendMessage("§9§oTwitter: @realluuuuuis");
                 p.sendMessage("§9§oGitHub: https://github.com/Luuuuuis/InstantVerify");
                 p.sendMessage("§9§oVersion: " + instantVerify.getUpdate().getVersion());
                 p.sendMessage("");
             } else if (args[0].length() == 18) {
                 if (instantVerify.getDiscord().getJda() == null) {
-                    p.sendMessage(instantVerify.getPrefix() + "§4Wir konnten dich leider nicht verifizieren, da keine Verbindung zu discord besteht! :(");
+                    p.sendMessage(instantVerify.getPrefix() + instantVerify.getLangConfig().getMessages().get("verify.noconnection"));
                     return;
                 }
                 User user = instantVerify.getDiscord().getJda().getUserById(args[0]);
                 if (user == null) {
-                    p.sendMessage(instantVerify.getPrefix() + "Bitte betrete unseren discord und überprüfe deine discord ID.");
+                    p.sendMessage(instantVerify.getPrefix() + instantVerify.getLangConfig().getMessages().get("verify.discord.usernull"));
                     return;
                 }
 
                 PlayerInfo playerInfo = PlayerInfo.getPlayerInfo(p.getUniqueId().toString(), instantVerify);
                 if (playerInfo != null && playerInfo.getDiscordid() != null && playerInfo.getDiscordid().equals(user.getId())) {
-                    p.sendMessage(instantVerify.getPrefix() + "Du hast dich bereits verifiziert!");
+                    p.sendMessage(instantVerify.getPrefix() + instantVerify.getLangConfig().getMessages().get("verify.already"));
                     return;
                 }
 
                 instantVerify.getDiscord().getVerifying().put(user.getId(), p);
-                user.openPrivateChannel().queue(channel -> channel.sendMessage("Hi " + user.getAsMention() + ",\nBitte sende mir dein Minecraft Namen, damit wir dich überprüfen können." +
-                        "\nFalls dies nicht dein Account ist, schließe diesen Chat einfach.").queue());
-                p.sendMessage(instantVerify.getPrefix() + "Der discord Bot hat dir eine Nachricht gesendet.");
+                user.openPrivateChannel().queue(channel -> channel.sendMessage(instantVerify.getLangConfig().getMessages().get("verify.bot.wrote").toString().replace("%MENTION", user.getAsMention())).queue());
             } else if (args[0].endsWith("=") && args[0].length() == 28) {
                 if (apiAsync == null) {
-                    p.sendMessage(instantVerify.getPrefix() + "§4Wir konnten dich leider nicht verifizieren, da keine Verbindung zu teamspeak besteht! :(");
+                    p.sendMessage(instantVerify.getPrefix() + instantVerify.getLangConfig().getMessages().get("verify.noconnection"));
                     return;
                 }
 
                 apiAsync.getClientByUId(args[0]).onSuccess(clientInfo -> {
                     if (clientInfo == null) {
-                        p.sendMessage(instantVerify.getPrefix() + "Bitte betrete unseren teamspeak und überprüfe dein Namen.");
+                        p.sendMessage(instantVerify.getPrefix() + instantVerify.getLangConfig().getMessages().get("verify.teamspeak.usernull"));
                         return;
                     }
                     List<Integer> groups = new ArrayList<>();
@@ -128,58 +120,51 @@ public class VerifyCommand extends Command {
 
                     if (!groups.contains(instantVerify.getTeamSpeak().getServerGroup())) {
                         if (clientInfo.getIp().equals(p.getAddress().getHostString())) {
-                            VerifyEvent verifyEvent = new VerifyEvent();
-                            ProxyServer.getInstance().getPluginManager().callEvent(verifyEvent);
-                            if (!verifyEvent.isCancelled()) {
-                                apiAsync.addClientToServerGroup(instantVerify.getTeamSpeak().getServerGroup(), clientInfo.getDatabaseId());
-                                apiAsync.editDatabaseClient(clientInfo.getDatabaseId(), Collections.singletonMap(ClientProperty.CLIENT_DESCRIPTION,
-                                        instantVerify.getServerConfig().getTeamSpeakCredentials().get("Description").toString()
-                                                .replace("%Name", p.getName())
-                                                .replace("%UUID", p.getUniqueId().toString())
-                                ));
-                                p.sendMessage(instantVerify.getPrefix() + "§aDu hast dich erfolgreich verifiziert!");
-                                instantVerify.getDbManager().getVerifyPlayer().update(p.getUniqueId(), clientInfo.getUniqueIdentifier(), null, null);
-                            }
+                            apiAsync.addClientToServerGroup(instantVerify.getTeamSpeak().getServerGroup(), clientInfo.getDatabaseId());
+                            apiAsync.editDatabaseClient(clientInfo.getDatabaseId(), Collections.singletonMap(ClientProperty.CLIENT_DESCRIPTION,
+                                    instantVerify.getServerConfig().getTeamSpeakCredentials().get("Description").toString()
+                                            .replace("%Name", p.getName())
+                                            .replace("%UUID", p.getUniqueId().toString())
+                            ));
+                            p.sendMessage(instantVerify.getPrefix() + instantVerify.getLangConfig().getMessages().get("verify.success"));
+                            instantVerify.getDbManager().getVerifyPlayer().update(p.getUniqueId(), clientInfo.getUniqueIdentifier(), null, null);
                         } else {
-                            p.sendMessage(instantVerify.getPrefix() + "§4Wir konnten dich leider nicht verifizieren, da deine IP auf dem commands Server eine andere als auf dem teamspeak ist!");
+                            p.sendMessage(instantVerify.getPrefix() + instantVerify.getLangConfig().getMessages().get("verify.teamspeak.otherip"));
                         }
                     } else {
-                        p.sendMessage(instantVerify.getPrefix() + "§cDu hast dich bereits verifiziert.");
+                        p.sendMessage(instantVerify.getPrefix() + instantVerify.getLangConfig().getMessages().get("verify.already"));
                     }
-                }).onFailure(ex -> p.sendMessage(instantVerify.getPrefix() + "Bitte betrete unseren teamspeak und überprüfe dein Namen."));
+                }).onFailure(ex -> p.sendMessage(instantVerify.getPrefix() + instantVerify.getLangConfig().getMessages().get("verify.teamspeak.usernull")));
             } else {
                 if (apiAsync == null) {
-                    p.sendMessage(instantVerify.getPrefix() + "§4Wir konnten dich leider nicht verifizieren, da keine Verbindung zu teamspeak besteht! :(");
+                    p.sendMessage(instantVerify.getPrefix() + instantVerify.getLangConfig().getMessages().get("verify.noconnection"));
                     return;
                 }
 
                 apiAsync.getClientByNameExact(args[0], false).onSuccess(client -> {
                     if (client == null) {
-                        p.sendMessage(instantVerify.getPrefix() + "Bitte betrete unseren teamspeak und überprüfe dein Namen.");
+                        p.sendMessage(instantVerify.getPrefix() + instantVerify.getLangConfig().getMessages().get("verify.teamspeak.usernull"));
                         return;
                     }
                     List<Integer> groups = new ArrayList<>();
                     Arrays.stream(client.getServerGroups()).forEach(groups::add);
 
                     if (!groups.contains(instantVerify.getTeamSpeak().getServerGroup())) {
+                        System.out.println(client.getIp() + " sa " + p.getAddress().getHostString());
                         if (client.getIp().equals(p.getAddress().getHostString())) {
-                            VerifyEvent verifyEvent = new VerifyEvent();
-                            ProxyServer.getInstance().getPluginManager().callEvent(verifyEvent);
-                            if (!verifyEvent.isCancelled()) {
-                                apiAsync.addClientToServerGroup(instantVerify.getTeamSpeak().getServerGroup(), client.getDatabaseId());
-                                apiAsync.editDatabaseClient(client.getDatabaseId(), Collections.singletonMap(ClientProperty.CLIENT_DESCRIPTION,
-                                        instantVerify.getServerConfig().getTeamSpeakCredentials().get("Description").toString()
-                                                .replace("%Name", p.getName())
-                                                .replace("%UUID", p.getUniqueId().toString())
-                                ));
-                                p.sendMessage(instantVerify.getPrefix() + "§aDu hast dich erfolgreich verifiziert!");
-                                instantVerify.getDbManager().getVerifyPlayer().update(p.getUniqueId(), client.getUniqueIdentifier(), null, null);
-                            }
+                            apiAsync.addClientToServerGroup(instantVerify.getTeamSpeak().getServerGroup(), client.getDatabaseId());
+                            apiAsync.editDatabaseClient(client.getDatabaseId(), Collections.singletonMap(ClientProperty.CLIENT_DESCRIPTION,
+                                    instantVerify.getServerConfig().getTeamSpeakCredentials().get("Description").toString()
+                                            .replace("%Name", p.getName())
+                                            .replace("%UUID", p.getUniqueId().toString())
+                            ));
+                            p.sendMessage(instantVerify.getPrefix() + instantVerify.getLangConfig().getMessages().get("verify.success"));
+                            instantVerify.getDbManager().getVerifyPlayer().update(p.getUniqueId(), client.getUniqueIdentifier(), null, null);
                         } else {
-                            p.sendMessage(instantVerify.getPrefix() + "§4Wir konnten dich leider nicht verifizieren, da deine IP auf dem commands Server eine andere als auf dem teamspeak ist!");
+                            p.sendMessage(instantVerify.getPrefix() + instantVerify.getLangConfig().getMessages().get("verify.teamspeak.otherip"));
                         }
                     } else {
-                        p.sendMessage(instantVerify.getPrefix() + "§cDu hast dich bereits verifiziert.");
+                        p.sendMessage(instantVerify.getPrefix() + instantVerify.getLangConfig().getMessages().get("verify.already"));
                     }
                 });
             }

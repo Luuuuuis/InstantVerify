@@ -1,6 +1,6 @@
 /*
- * Developed by Luuuuuis on 23.04.19 16:47.
- * Last modified 23.04.19 16:46.
+ * Developed by Luuuuuis on 04.05.19 23:14.
+ * Last modified 04.05.19 20:41.
  * Copyright (c) 2019.
  */
 
@@ -71,8 +71,8 @@ public class Update {
                             ex.printStackTrace();
                         }
 
-                        System.out.println("instantverify >> A new update is available(" + versionCode[0] + ") please restart your server soon.");
-                        System.out.println("instantverify >> Changelog can be viewed at GitHub: https://github.com/Luuuuuis/InstantVerify/releases");
+                        System.out.println("InstantVerify >> A new update is available(" + versionCode[0] + ") please restart your server soon.");
+                        System.out.println("InstantVerify >> Changelog can be viewed at GitHub: https://github.com/Luuuuuis/InstantVerify/releases");
 
                         setVersion(instantVerify.getDescription().getVersion() + " (outdated)");
                     });

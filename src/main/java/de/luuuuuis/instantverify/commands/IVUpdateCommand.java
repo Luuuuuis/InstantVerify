@@ -1,6 +1,6 @@
 /*
- * Developed by Luuuuuis on 23.04.19 16:47.
- * Last modified 23.04.19 16:46.
+ * Developed by Luuuuuis on 04.05.19 23:14.
+ * Last modified 04.05.19 22:16.
  * Copyright (c) 2019.
  */
 
@@ -24,9 +24,9 @@ public class IVUpdateCommand extends Command {
     public void execute(CommandSender sender, String[] args) {
 
         if (instantVerify.getUpdate().searchForUpdate()) {
-            sender.sendMessage(instantVerify.getPrefix() + "§6Ein Update wurde heruntergeladen. Bitte starte den Proxy neu!");
+            sender.sendMessage(instantVerify.getPrefix() + instantVerify.getLangConfig().getMessages().get("update.restart"));
         } else {
-            sender.sendMessage(instantVerify.getPrefix() + "§aDu hast bereits die neuste Version!");
+            sender.sendMessage(instantVerify.getPrefix() + instantVerify.getLangConfig().getMessages().get("update.latest"));
         }
     }
 }

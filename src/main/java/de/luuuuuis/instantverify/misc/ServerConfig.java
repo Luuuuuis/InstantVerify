@@ -1,6 +1,6 @@
 /*
- * Developed by Luuuuuis on 23.04.19 16:47.
- * Last modified 23.04.19 16:46.
+ * Developed by Luuuuuis on 04.05.19 23:14.
+ * Last modified 04.05.19 22:43.
  * Copyright (c) 2019.
  */
 
@@ -64,7 +64,7 @@ public class ServerConfig {
                     teamspeak.put("username", "serveradmin");
                     teamspeak.put("password", "yourPassword");
                     teamspeak.put("VirtualServerID", 1);
-                    teamspeak.put("Nickname", "instantverify TS Bot");
+                    teamspeak.put("Nickname", "InstantVerify TS Bot");
                     teamspeak.put("ServerGroup", 7);
                     teamspeak.put("Description", "Minecraft Name: %Name | UUID: %UUID");
                     teamspeak.put("Instant", true);

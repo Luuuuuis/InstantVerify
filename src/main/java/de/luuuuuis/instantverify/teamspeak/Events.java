@@ -1,6 +1,6 @@
 /*
- * Developed by Luuuuuis on 23.04.19 16:47.
- * Last modified 23.04.19 16:47.
+ * Developed by Luuuuuis on 04.05.19 23:14.
+ * Last modified 04.05.19 23:09.
  * Copyright (c) 2019.
  */
 
@@ -10,7 +10,6 @@ import com.github.theholywaffle.teamspeak3.TS3ApiAsync;
 import com.github.theholywaffle.teamspeak3.api.ClientProperty;
 import com.github.theholywaffle.teamspeak3.api.event.*;
 import de.luuuuuis.instantverify.InstantVerify;
-import de.luuuuuis.instantverify.events.VerifyEvent;
 import net.md_5.bungee.api.ProxyServer;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
 
@@ -46,17 +45,13 @@ class Events {
                             ProxiedPlayer player = playerList.stream().filter(players -> players.getAddress().getHostString().equals(clientInfo.getIp())).findFirst().orElse(null);
                             if (player == null) return;
 
-                            VerifyEvent verifyEvent = new VerifyEvent();
-                            ProxyServer.getInstance().getPluginManager().callEvent(verifyEvent);
-                            if (!verifyEvent.isCancelled()) {
-                                apiAsync.addClientToServerGroup(instantVerify.getTeamSpeak().getServerGroup(), clientInfo.getDatabaseId());
-                                apiAsync.editDatabaseClient(clientInfo.getDatabaseId(), Collections.singletonMap(ClientProperty.CLIENT_DESCRIPTION,
-                                        instantVerify.getServerConfig().getTeamSpeakCredentials().get("Description").toString()
-                                                .replace("%Name", player.getName())
-                                                .replace("%UUID", player.getUniqueId().toString())
-                                ));
-                                instantVerify.getDbManager().getVerifyPlayer().update(player.getUniqueId(), clientInfo.getUniqueIdentifier(), null, null);
-                            }
+                            apiAsync.addClientToServerGroup(instantVerify.getTeamSpeak().getServerGroup(), clientInfo.getDatabaseId());
+                            apiAsync.editDatabaseClient(clientInfo.getDatabaseId(), Collections.singletonMap(ClientProperty.CLIENT_DESCRIPTION,
+                                    instantVerify.getServerConfig().getTeamSpeakCredentials().get("Description").toString()
+                                            .replace("%Name", player.getName())
+                                            .replace("%UUID", player.getUniqueId().toString())
+                            ));
+                            instantVerify.getDbManager().getVerifyPlayer().update(player.getUniqueId(), clientInfo.getUniqueIdentifier(), null, null);
 
                         });
 

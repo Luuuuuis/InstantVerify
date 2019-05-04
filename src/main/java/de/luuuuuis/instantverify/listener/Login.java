@@ -1,6 +1,6 @@
 /*
- * Developed by Luuuuuis on 23.04.19 16:47.
- * Last modified 23.04.19 16:47.
+ * Developed by Luuuuuis on 04.05.19 23:14.
+ * Last modified 04.05.19 23:09.
  * Copyright (c) 2019.
  */
 
@@ -10,8 +10,6 @@ import com.github.theholywaffle.teamspeak3.TS3ApiAsync;
 import com.github.theholywaffle.teamspeak3.api.ClientProperty;
 import com.github.theholywaffle.teamspeak3.api.wrapper.Client;
 import de.luuuuuis.instantverify.InstantVerify;
-import de.luuuuuis.instantverify.events.VerifyEvent;
-import net.md_5.bungee.api.ProxyServer;
 import net.md_5.bungee.api.event.LoginEvent;
 import net.md_5.bungee.api.plugin.Listener;
 import net.md_5.bungee.event.EventHandler;
@@ -45,19 +43,15 @@ public class Login implements Listener {
             Arrays.stream(client.getServerGroups()).forEach(groups::add);
 
             if (!groups.contains(instantVerify.getTeamSpeak().getServerGroup())) {
-                VerifyEvent verifyEvent = new VerifyEvent();
-                ProxyServer.getInstance().getPluginManager().callEvent(verifyEvent);
-                if (!verifyEvent.isCancelled()) {
-                    apiAsync.addClientToServerGroup(instantVerify.getTeamSpeak().getServerGroup(), client.getDatabaseId());
-                    apiAsync.editDatabaseClient(client.getDatabaseId(), Collections.singletonMap(ClientProperty.CLIENT_DESCRIPTION,
-                            instantVerify.getServerConfig().getTeamSpeakCredentials().get("Description").toString()
-                                    .replace("%Name", e.getConnection().getName())
-                                    .replace("%UUID", e.getConnection().getUniqueId().toString())
-                    ));
-                    instantVerify.getDbManager().getVerifyPlayer().update(e.getConnection().getUniqueId(), client.getUniqueIdentifier(), null, null);
-                }
+                apiAsync.addClientToServerGroup(instantVerify.getTeamSpeak().getServerGroup(), client.getDatabaseId());
+                apiAsync.editDatabaseClient(client.getDatabaseId(), Collections.singletonMap(ClientProperty.CLIENT_DESCRIPTION,
+                        instantVerify.getServerConfig().getTeamSpeakCredentials().get("Description").toString()
+                                .replace("%Name", e.getConnection().getName())
+                                .replace("%UUID", e.getConnection().getUniqueId().toString())
+                ));
+                instantVerify.getDbManager().getVerifyPlayer().update(e.getConnection().getUniqueId(), client.getUniqueIdentifier(), null, null);
             }
-        }).onFailure(ex -> System.err.println("instantverify >> Could not get players! \n" + ex.getMessage()));
+        }).onFailure(ex -> System.err.println("InstantVerify >> Could not get players! \n" + ex.getMessage()));
 
         e.completeIntent(instantVerify);
     }

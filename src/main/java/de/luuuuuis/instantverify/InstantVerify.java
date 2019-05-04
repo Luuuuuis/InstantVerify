@@ -1,6 +1,6 @@
 /*
- * Developed by Luuuuuis on 23.04.19 19:42.
- * Last modified 23.04.19 17:04.
+ * Developed by Luuuuuis on 04.05.19 23:14.
+ * Last modified 04.05.19 22:32.
  * Copyright (c) 2019.
  */
 
@@ -13,6 +13,7 @@ import de.luuuuuis.instantverify.discord.Discord;
 import de.luuuuuis.instantverify.listener.Login;
 import de.luuuuuis.instantverify.misc.ServerConfig;
 import de.luuuuuis.instantverify.misc.Update;
+import de.luuuuuis.instantverify.misc.lang.LangConfig;
 import de.luuuuuis.instantverify.teamspeak.TeamSpeak;
 import net.md_5.bungee.api.plugin.Plugin;
 import net.md_5.bungee.api.plugin.PluginManager;
@@ -24,6 +25,7 @@ public class InstantVerify extends Plugin {
     private TeamSpeak teamSpeak;
     private Update update;
     private Discord discord;
+    private LangConfig langConfig;
 
     private DBManager dbManager;
 
@@ -57,17 +59,7 @@ public class InstantVerify extends Plugin {
         }
 
         /*
-         * Starts the discord Bot
-         */
-        String botToken = serverConfig.getDiscordCredentials().get("Token").toString();
-        discord = new Discord(this);
-        if (!botToken.equals("BOT-TOKEN")) {
-            discord.init(botToken);
-            discord.setDiscordRole(serverConfig.getDiscordCredentials().get("ServerGroup").toString());
-        }
-
-        /*
-         * commands commands
+         * commands
          */
         PluginManager pm = getProxy().getPluginManager();
         pm.registerCommand(this, new VerifyCommand("verify", this));
@@ -77,10 +69,25 @@ public class InstantVerify extends Plugin {
         }
 
         /*
+         * Lang
+         */
+        langConfig = new LangConfig(this);
+
+        /*
          * database Manager
          */
         dbManager = new DBManager(this);
         dbManager.connect();
+
+        /*
+         * Starts the discord Bot
+         */
+        String botToken = serverConfig.getDiscordCredentials().get("Token").toString();
+        discord = new Discord(this);
+        if (!botToken.equals("BOT-TOKEN")) {
+            discord.init(botToken);
+            discord.setDiscordRole(serverConfig.getDiscordCredentials().get("ServerGroup").toString());
+        }
 
         /*
          * Updater
@@ -126,5 +133,9 @@ public class InstantVerify extends Plugin {
 
     public DBManager getDbManager() {
         return dbManager;
+    }
+
+    public LangConfig getLangConfig() {
+        return langConfig;
     }
 }

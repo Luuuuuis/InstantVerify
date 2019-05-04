@@ -1,6 +1,6 @@
 /*
- * Developed by Luuuuuis on 23.04.19 16:47.
- * Last modified 23.04.19 16:46.
+ * Developed by Luuuuuis on 04.05.19 23:14.
+ * Last modified 04.05.19 22:33.
  * Copyright (c) 2019.
  */
 
@@ -35,7 +35,7 @@ public class Discord {
                         .setToken(token)
                         .setStatus(OnlineStatus.ONLINE)
                         .addEventListener(new Events(instantVerify))
-                        .setGame(Game.listening("Schreib mir"))
+                        .setGame(Game.listening(instantVerify.getLangConfig().getMessages().get("discord.listening").toString()))
                         .buildAsync();
                 jda.setAutoReconnect(true);
             } catch (LoginException e) {
