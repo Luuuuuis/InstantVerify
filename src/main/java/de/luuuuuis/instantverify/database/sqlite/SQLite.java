@@ -30,7 +30,8 @@ public class SQLite {
 
             if (connection != null) {
                 DatabaseMetaData metaData = connection.getMetaData();
-                System.out.println("instantverify sqlite >> Connected to " + metaData.getDatabaseProductName());
+                if (instantVerify.getServerConfig().isDebugMode())
+                    System.out.println("InstantVerify SQLite >> Connected to " + metaData.getDatabaseProductName());
 
                 instantVerify.getDbManager().setConnection(connection);
             }

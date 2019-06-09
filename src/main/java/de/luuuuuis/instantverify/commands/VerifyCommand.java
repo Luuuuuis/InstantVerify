@@ -31,11 +31,12 @@ public class VerifyCommand extends Command {
     @Override
     public void execute(CommandSender sender, String[] args) {
         if (!(sender instanceof ProxiedPlayer)) {
-            sender.sendMessage("instantverify >> Command only usable as player!");
+            sender.sendMessage("InstantVerify >> Command only usable as player!");
             return;
         }
 
         ProxiedPlayer p = (ProxiedPlayer) sender;
+
 
         TS3ApiAsync apiAsync = instantVerify.getTeamSpeak().getApi();
 
@@ -50,14 +51,7 @@ public class VerifyCommand extends Command {
                         Arrays.stream(client.getServerGroups()).forEach(groups::add);
 
                         if (!groups.contains(instantVerify.getTeamSpeak().getServerGroup())) {
-                            apiAsync.addClientToServerGroup(instantVerify.getTeamSpeak().getServerGroup(), client.getDatabaseId());
-                            apiAsync.editDatabaseClient(client.getDatabaseId(), Collections.singletonMap(ClientProperty.CLIENT_DESCRIPTION,
-                                    instantVerify.getServerConfig().getTeamSpeakCredentials().get("Description").toString()
-                                            .replace("%Name", p.getName())
-                                            .replace("%UUID", p.getUniqueId().toString())
-                            ));
-                            p.sendMessage(instantVerify.getPrefix() + instantVerify.getLangConfig().getMessages().get("verify.success"));
-                            instantVerify.getDbManager().getVerifyPlayer().update(p.getUniqueId(), client.getUniqueIdentifier(), null, null);
+                            addToGroup(p, apiAsync, client);
                         }
                     }
                 }).onFailure(ex -> System.err.println("instantverify >> Could not get players! \n" + ex.getMessage()));
@@ -97,7 +91,7 @@ public class VerifyCommand extends Command {
                 }
 
                 PlayerInfo playerInfo = PlayerInfo.getPlayerInfo(p.getUniqueId().toString(), instantVerify);
-                if (playerInfo != null && playerInfo.getDiscordid() != null && playerInfo.getDiscordid().equals(user.getId())) {
+                if (playerInfo != null && playerInfo.getDiscordID() != null && playerInfo.getDiscordID().equals(user.getId())) {
                     p.sendMessage(instantVerify.getPrefix() + instantVerify.getLangConfig().getMessages().get("verify.already"));
                     return;
                 }
@@ -119,15 +113,12 @@ public class VerifyCommand extends Command {
                     Arrays.stream(clientInfo.getServerGroups()).forEach(groups::add);
 
                     if (!groups.contains(instantVerify.getTeamSpeak().getServerGroup())) {
+
+                        if (instantVerify.getServerConfig().isDebugMode())
+                            System.out.println("InstantVerify DEBUG >> TS-IP: " + clientInfo.getIp() + " || MC-IP: " + p.getAddress().getHostString());
+
                         if (clientInfo.getIp().equals(p.getAddress().getHostString())) {
-                            apiAsync.addClientToServerGroup(instantVerify.getTeamSpeak().getServerGroup(), clientInfo.getDatabaseId());
-                            apiAsync.editDatabaseClient(clientInfo.getDatabaseId(), Collections.singletonMap(ClientProperty.CLIENT_DESCRIPTION,
-                                    instantVerify.getServerConfig().getTeamSpeakCredentials().get("Description").toString()
-                                            .replace("%Name", p.getName())
-                                            .replace("%UUID", p.getUniqueId().toString())
-                            ));
-                            p.sendMessage(instantVerify.getPrefix() + instantVerify.getLangConfig().getMessages().get("verify.success"));
-                            instantVerify.getDbManager().getVerifyPlayer().update(p.getUniqueId(), clientInfo.getUniqueIdentifier(), null, null);
+                            addToGroup(p, apiAsync, clientInfo);
                         } else {
                             p.sendMessage(instantVerify.getPrefix() + instantVerify.getLangConfig().getMessages().get("verify.teamspeak.otherip"));
                         }
@@ -146,20 +137,18 @@ public class VerifyCommand extends Command {
                         p.sendMessage(instantVerify.getPrefix() + instantVerify.getLangConfig().getMessages().get("verify.teamspeak.usernull"));
                         return;
                     }
+
                     List<Integer> groups = new ArrayList<>();
                     Arrays.stream(client.getServerGroups()).forEach(groups::add);
 
                     if (!groups.contains(instantVerify.getTeamSpeak().getServerGroup())) {
-                        System.out.println(client.getIp() + " sa " + p.getAddress().getHostString());
+
+                        if (instantVerify.getServerConfig().isDebugMode())
+                            System.out.println("InstantVerify DEBUG >> TS-IP: " + client.getIp() + " || MC-IP: " + p.getAddress().getHostString());
+
+
                         if (client.getIp().equals(p.getAddress().getHostString())) {
-                            apiAsync.addClientToServerGroup(instantVerify.getTeamSpeak().getServerGroup(), client.getDatabaseId());
-                            apiAsync.editDatabaseClient(client.getDatabaseId(), Collections.singletonMap(ClientProperty.CLIENT_DESCRIPTION,
-                                    instantVerify.getServerConfig().getTeamSpeakCredentials().get("Description").toString()
-                                            .replace("%Name", p.getName())
-                                            .replace("%UUID", p.getUniqueId().toString())
-                            ));
-                            p.sendMessage(instantVerify.getPrefix() + instantVerify.getLangConfig().getMessages().get("verify.success"));
-                            instantVerify.getDbManager().getVerifyPlayer().update(p.getUniqueId(), client.getUniqueIdentifier(), null, null);
+                            addToGroup(p, apiAsync, client);
                         } else {
                             p.sendMessage(instantVerify.getPrefix() + instantVerify.getLangConfig().getMessages().get("verify.teamspeak.otherip"));
                         }
@@ -171,5 +160,17 @@ public class VerifyCommand extends Command {
         }
 
     }
+
+    private void addToGroup(ProxiedPlayer p, TS3ApiAsync apiAsync, Client client) {
+        apiAsync.addClientToServerGroup(instantVerify.getTeamSpeak().getServerGroup(), client.getDatabaseId());
+        apiAsync.editDatabaseClient(client.getDatabaseId(), Collections.singletonMap(ClientProperty.CLIENT_DESCRIPTION,
+                instantVerify.getServerConfig().getTeamSpeakCredentials().get("Description").toString()
+                        .replace("%Name", p.getName())
+                        .replace("%UUID", p.getUniqueId().toString())
+        ));
+        p.sendMessage(instantVerify.getPrefix() + instantVerify.getLangConfig().getMessages().get("verify.success"));
+        instantVerify.getDbManager().getVerifyPlayer().update(p.getUniqueId(), client.getUniqueIdentifier(), null, null);
+    }
+
 
 }

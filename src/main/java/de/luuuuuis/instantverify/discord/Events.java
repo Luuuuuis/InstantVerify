@@ -14,7 +14,7 @@ public class Events extends ListenerAdapter {
 
     private InstantVerify instantVerify;
 
-    public Events(InstantVerify instantVerify) {
+    Events(InstantVerify instantVerify) {
         this.instantVerify = instantVerify;
     }
 

@@ -34,7 +34,8 @@ public class MySQL {
 
             if (connection != null) {
                 DatabaseMetaData metaData = connection.getMetaData();
-                System.out.println("instantverify mysql >> Connected to " + metaData.getDatabaseProductName());
+                if (instantVerify.getServerConfig().isDebugMode())
+                    System.out.println("InstantVerify MySQL >> Connected to " + metaData.getDatabaseProductName());
 
                 instantVerify.getDbManager().setConnection(connection);
             }

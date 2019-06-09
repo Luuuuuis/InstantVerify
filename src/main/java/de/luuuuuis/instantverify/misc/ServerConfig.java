@@ -27,6 +27,7 @@ public class ServerConfig {
     private HashMap<String, Object> DiscordCredentials = new HashMap<>();
     private HashMap<String, Object> SQLiteCredentials = new HashMap<>();
     private HashMap<String, Object> MySQLCredentials = new HashMap<>();
+    private boolean debugMode = true;
     private InstantVerify instantVerify;
 
     public ServerConfig(InstantVerify instantVerify) {
@@ -40,10 +41,22 @@ public class ServerConfig {
             File file = new File(instantVerify.getDataFolder().getPath(), "config.json");
             if (!file.exists()) {
                 if (!instantVerify.getDataFolder().exists())
-                    instantVerify.getDataFolder().mkdir();
+
+
+                    if (instantVerify.getDataFolder().mkdir()) {
+                        System.out.println("InstantVerify DEBUG >> Created plugin data folder");
+                    } else {
+                        System.err.println("InstantVerify DEBUG >> Error while creating plugin data folder!");
+                    }
 
                 try {
-                    file.createNewFile();
+
+                    if (file.createNewFile()) {
+                        System.out.println("InstantVerify DEBUG >> Created config");
+                    } else {
+                        System.err.println("InstantVerify DEBUG >> Error while creating config!");
+                    }
+
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
@@ -53,6 +66,7 @@ public class ServerConfig {
 
                     JSONObject jsonObject = new JSONObject();
                     jsonObject.put("Prefix", "&eInstantVerify &8>>");
+                    jsonObject.put("Debugmode", false);
 
                     JSONObject discord = new JSONObject();
                     discord.put("Token", "BOT-TOKEN");
@@ -125,6 +139,7 @@ public class ServerConfig {
                 }
 
                 instantVerify.setPrefix(ChatColor.translateAlternateColorCodes('&', jsonObject.get("Prefix").toString().replace("§", "&") + "&7 "));
+                debugMode = (boolean) jsonObject.get("Debugmode");
 
             } catch (IOException | ParseException e) {
                 e.printStackTrace();
@@ -153,5 +168,9 @@ public class ServerConfig {
 
     public HashMap<String, Object> getMySQLCredentials() {
         return MySQLCredentials;
+    }
+
+    public boolean isDebugMode() {
+        return debugMode;
     }
 }

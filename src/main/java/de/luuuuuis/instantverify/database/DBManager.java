@@ -56,7 +56,8 @@ public class DBManager {
         if (!isConnected()) return;
         try {
             connection.close();
-            System.out.println("instantverify SQL >> Successfully closed the connection");
+            if (instantVerify.getServerConfig().isDebugMode())
+                System.out.println("InstantVerify SQL >> Successfully closed the connection");
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -76,11 +77,11 @@ public class DBManager {
     }
 
 
-    public boolean isConnected() {
+    boolean isConnected() {
         return connection != null;
     }
 
-    public Connection getConnection() {
+    Connection getConnection() {
         return connection;
     }
 

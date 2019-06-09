@@ -29,8 +29,8 @@ public class VerifyPlayer {
 
             try (PreparedStatement preparedStatement = instantVerify.getDbManager().getConnection().prepareStatement("UPDATE verify SET TSID=?, DISCORDID=?, EMAIL=? WHERE UUID=?")) {
 
-                preparedStatement.setString(1, (TSID == null ? playerInfo.getTsid() : TSID));
-                preparedStatement.setString(2, (DISCORDID == null ? playerInfo.getDiscordid() : DISCORDID));
+                preparedStatement.setString(1, (TSID == null ? playerInfo.getTsID() : TSID));
+                preparedStatement.setString(2, (DISCORDID == null ? playerInfo.getDiscordID() : DISCORDID));
                 preparedStatement.setString(3, (EMAIL == null ? playerInfo.getEmail() : EMAIL));
                 preparedStatement.setString(4, uuid.toString());
 

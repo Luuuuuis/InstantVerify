@@ -32,7 +32,8 @@ public class TeamSpeak {
                 api.selectVirtualServerById(Integer.parseInt(instantVerify.getServerConfig().getTeamSpeakCredentials().get("VirtualServerID").toString()));
                 api.setNickname(instantVerify.getServerConfig().getTeamSpeakCredentials().get("Nickname").toString());
 
-                System.out.println("instantverify >> Successfully connected to teamspeak");
+                if (instantVerify.getServerConfig().isDebugMode())
+                    System.out.println("InstantVerify DEBUG >> Successfully connected to teamspeak");
 
                 if (instantVerify.getServerConfig().getTeamSpeakCredentials().get("Instant").equals(true)) {
                     assert api != null;
@@ -41,7 +42,7 @@ public class TeamSpeak {
             });
             thread.start();
         } catch (Exception ex) {
-            System.err.println("instantverify >> Cannot connect to the teamspeak server! Check your config to make sure you are using the correct credentials.");
+            System.err.println("InstantVerify DEBUG >> Cannot connect to the teamspeak server! Check your config to make sure you are using the correct credentials.");
             query.exit();
             api.logout();
             api = null;

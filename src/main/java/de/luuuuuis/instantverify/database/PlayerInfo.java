@@ -13,11 +13,11 @@ import java.sql.SQLException;
 
 public class PlayerInfo {
 
-    private String tsid, discordid, email;
+    private String tsID, discordID, email;
 
     private PlayerInfo(ResultSet rs) throws SQLException {
-        tsid = rs.getString("TSID");
-        discordid = rs.getString("DISCORDID");
+        tsID = rs.getString("TSID");
+        discordID = rs.getString("DISCORDID");
         email = rs.getString("EMAIL");
     }
 
@@ -34,12 +34,12 @@ public class PlayerInfo {
     }
 
 
-    String getTsid() {
-        return tsid;
+    String getTsID() {
+        return tsID;
     }
 
-    public String getDiscordid() {
-        return discordid;
+    public String getDiscordID() {
+        return discordID;
     }
 
     String getEmail() {

@@ -36,7 +36,8 @@ public class Discord {
                         .setStatus(OnlineStatus.ONLINE)
                         .addEventListener(new Events(instantVerify))
                         .setGame(Game.listening(instantVerify.getLangConfig().getMessages().get("discord.listening").toString()))
-                        .buildAsync();
+                        .build();
+
                 jda.setAutoReconnect(true);
             } catch (LoginException e) {
                 e.printStackTrace();
