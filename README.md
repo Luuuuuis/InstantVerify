@@ -1,7 +1,7 @@
 # InstantVerify
 InstantVerify! Verify instantly! For Discord &amp; TeamSpeak
 
-Get instantly verified with InstantVerify!
+Verify your TeamSpeak account on your BungeeCord!
 
 Commands:
  - /verify TeamSpeak Name
