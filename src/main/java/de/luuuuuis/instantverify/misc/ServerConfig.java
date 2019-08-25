@@ -66,7 +66,7 @@ public class ServerConfig {
 
                     JSONObject jsonObject = new JSONObject();
                     jsonObject.put("Prefix", "&eInstantVerify &8>>");
-                    jsonObject.put("Debugmode", false);
+                    jsonObject.put("Debugmode", true);
 
                     JSONObject discord = new JSONObject();
                     discord.put("Token", "BOT-TOKEN");
