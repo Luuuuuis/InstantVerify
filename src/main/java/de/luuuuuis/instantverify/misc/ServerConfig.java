@@ -40,7 +40,7 @@ public class ServerConfig {
 
             File file = new File(instantVerify.getDataFolder().getPath(), "config.json");
             if (!file.exists()) {
-                if (!instantVerify.getDataFolder().exists())
+                if (!instantVerify.getDataFolder().exists()) {
 
 
                     if (instantVerify.getDataFolder().mkdir()) {
@@ -49,16 +49,17 @@ public class ServerConfig {
                         System.err.println("InstantVerify DEBUG >> Error while creating plugin data folder!");
                     }
 
-                try {
+                    try {
 
-                    if (file.createNewFile()) {
-                        System.out.println("InstantVerify DEBUG >> Created config");
-                    } else {
-                        System.err.println("InstantVerify DEBUG >> Error while creating config!");
+                        if (file.createNewFile()) {
+                            System.out.println("InstantVerify DEBUG >> Created config");
+                        } else {
+                            System.err.println("InstantVerify DEBUG >> Error while creating config!");
+                        }
+
+                    } catch (IOException e) {
+                        e.printStackTrace();
                     }
-
-                } catch (IOException e) {
-                    e.printStackTrace();
                 }
 
 
